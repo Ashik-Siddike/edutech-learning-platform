@@ -1,8 +1,7 @@
-// Products Page component consuming DummyJSON API via custom useProducts & useProduct hooks
 import { useState, useMemo } from "react";
 import useProducts from "../hooks/useProducts";
-import { useProduct } from "../hooks/useProduct";
 import ProductCard from "./ProductCard";
+import ProductModal from "./ProductModal";
 
 export default function ProductsPage({
   cart = [],
@@ -18,12 +17,6 @@ export default function ProductsPage({
 
   // Selected product ID for Quick View Modal
   const [selectedProductId, setSelectedProductId] = useState(null);
-
-  // Fetch single product details using useProduct hook when modal is open
-  const {
-    product: modalProduct,
-    loading: modalLoading,
-  } = useProduct(selectedProductId);
 
   // Derive sort parameters for DummyJSON API
   const sortParams = useMemo(() => {
@@ -95,6 +88,8 @@ export default function ProductsPage({
     setCurrentPage(1);
   };
 
+
+
   // Check if a product is in cart
   const isProductInCart = (id) => cart.some((item) => item.id === `prod-${id}`);
 
@@ -104,7 +99,7 @@ export default function ProductsPage({
         {/* Header banner */}
         <div className="relative rounded-3xl bg-gradient-to-r from-[#191b24] via-[#212430] to-[#191b24] p-6 sm:p-10 border border-gray-800 shadow-2xl overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
-          
+
           <div className="relative z-10 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-950/60 border border-orange-700/50 text-orange-400 text-xs font-semibold mb-3">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
@@ -208,11 +203,10 @@ export default function ProductsPage({
                   key={cat.id}
                   type="button"
                   onClick={() => handleCategoryChange(cat.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${
-                    active
-                      ? "bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white shadow"
-                      : "bg-[#212430] hover:bg-[#272b3a] text-gray-400 hover:text-white border border-gray-800"
-                  }`}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${active
+                    ? "bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white shadow"
+                    : "bg-[#212430] hover:bg-[#272b3a] text-gray-400 hover:text-white border border-gray-800"
+                    }`}
                 >
                   {cat.label}
                 </button>
@@ -359,146 +353,14 @@ export default function ProductsPage({
         )}
       </div>
 
-      {/* Quick View Product Modal */}
-      {selectedProductId && (
-        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-2xl bg-[#191b24] border border-gray-800 rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={() => setSelectedProductId(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs"
-            >
-              ✕
-            </button>
-
-            {modalLoading || !modalProduct ? (
-              <div className="py-16 text-center space-y-3">
-                <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                <p className="text-xs text-gray-400">Loading product details from DummyJSON...</p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {/* Top media & title section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Image showcase */}
-                  <div className="bg-[#14161f] rounded-2xl p-4 flex items-center justify-center aspect-square border border-gray-800">
-                    <img
-                      src={modalProduct.thumbnail || modalProduct.images?.[0]}
-                      alt={modalProduct.title}
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  </div>
-
-                  {/* Summary details */}
-                  <div className="space-y-3 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-orange-400 bg-orange-950/60 px-2 py-0.5 rounded border border-orange-800/40">
-                        {modalProduct.category}
-                      </span>
-
-                      <h2 className="text-lg sm:text-xl font-bold font-serif text-white mt-2 leading-tight">
-                        {modalProduct.title}
-                      </h2>
-
-                      <p className="text-xs text-gray-400 mt-1">
-                        Brand: <span className="text-white font-medium">{modalProduct.brand || "Authentic"}</span> • SKU: <span className="font-mono text-gray-400">{modalProduct.sku}</span>
-                      </p>
-
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-xl font-bold font-mono text-white">
-                          ${modalProduct.price?.toFixed(2)}
-                        </span>
-                        {modalProduct.discountPercentage > 0 && (
-                          <span className="text-xs font-bold text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded">
-                            -{Math.round(modalProduct.discountPercentage)}% OFF
-                          </span>
-                        )}
-                      </div>
-
-                      <p className="text-xs text-gray-300 mt-3 leading-relaxed">
-                        {modalProduct.description}
-                      </p>
-                    </div>
-
-                    {/* Stock & Cart action */}
-                    <div className="pt-4 border-t border-gray-800 flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const isIn = isProductInCart(modalProduct.id);
-                          if (isIn) {
-                            if (onRemoveFromCart) onRemoveFromCart(`prod-${modalProduct.id}`);
-                          } else {
-                            if (onAddToCart) {
-                              onAddToCart({
-                                id: `prod-${modalProduct.id}`,
-                                title: modalProduct.title,
-                                price: Math.round(modalProduct.price * 120),
-                                originalPrice: Math.round(
-                                  (modalProduct.price / (1 - modalProduct.discountPercentage / 100)) * 120
-                                ),
-                                displayPriceUSD: `$${modalProduct.price.toFixed(2)}`,
-                                image: modalProduct.thumbnail,
-                                directImage: modalProduct.thumbnail,
-                                category: modalProduct.category,
-                                brand: modalProduct.brand || "Official",
-                              });
-                            }
-                          }
-                        }}
-                        className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer shadow ${
-                          isProductInCart(modalProduct.id)
-                            ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                            : "bg-gradient-to-r from-[#b0401d] to-[#df5d2c] hover:opacity-95 text-white"
-                        }`}
-                      >
-                        {isProductInCart(modalProduct.id) ? "In Your Cart (Click to Remove)" : "Add to Cart"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional Metadata Specifications */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 border-t border-gray-800 text-xs">
-                  <div className="p-3 rounded-xl bg-[#212430] border border-gray-800">
-                    <span className="text-[10px] text-gray-400 block">Warranty</span>
-                    <span className="font-medium text-white">{modalProduct.warrantyInformation || "1 Year Standard"}</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-[#212430] border border-gray-800">
-                    <span className="text-[10px] text-gray-400 block">Shipping</span>
-                    <span className="font-medium text-white">{modalProduct.shippingInformation || "Ships in 2-3 days"}</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-[#212430] border border-gray-800">
-                    <span className="text-[10px] text-gray-400 block">Return Policy</span>
-                    <span className="font-medium text-white">{modalProduct.returnPolicy || "30 Days return"}</span>
-                  </div>
-                </div>
-
-                {/* Reviews section */}
-                {modalProduct.reviews?.length > 0 && (
-                  <div className="space-y-3 pt-2 border-t border-gray-800">
-                    <h3 className="text-xs font-bold font-serif text-white uppercase tracking-wider">
-                      Verified Reviews ({modalProduct.reviews.length})
-                    </h3>
-                    <div className="space-y-2">
-                      {modalProduct.reviews.slice(0, 3).map((rev, i) => (
-                        <div key={i} className="p-3 rounded-xl bg-[#212430] border border-gray-800/80 text-xs">
-                          <div className="flex items-center justify-between text-gray-400 mb-1">
-                            <span className="font-semibold text-white">{rev.reviewerName}</span>
-                            <span className="text-amber-400 font-mono">★ {rev.rating}</span>
-                          </div>
-                          <p className="text-gray-300 italic">"{rev.comment}"</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Standalone Dynamic Product Details Modal */}
+      <ProductModal
+        productId={selectedProductId}
+        onClose={() => setSelectedProductId(null)}
+        isInCart={selectedProductId ? isProductInCart(selectedProductId) : false}
+        onAddToCart={onAddToCart}
+        onRemoveFromCart={onRemoveFromCart}
+      />
     </div>
   );
 }

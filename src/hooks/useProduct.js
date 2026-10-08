@@ -3,6 +3,11 @@
 import { useState, useEffect, useCallback } from "react";
 import axiosClient from "../api/axiosClient";
 
+/**
+ * Custom hook to fetch a single product by ID
+ * @param {number|string|null} productId - The ID of the product
+ * @returns {{ product: Object|null, loading: boolean, error: string|null, refetch: Function }}
+ */
 export function useProduct(productId) {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
