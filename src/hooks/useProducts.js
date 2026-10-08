@@ -6,6 +6,7 @@ import axiosClient from "../api/axiosClient";
 
 export function useProducts(options = {}) {
   const {
+    endpoint = "/products",
     search = "",
     category = "",
     limit = 20,
@@ -24,15 +25,15 @@ export function useProducts(options = {}) {
     setError(null);
 
     try {
-      let endpoint = "/products";
+      let targetEndpoint = endpoint;
       const params = {};
 
       // Determine endpoint based on search query or category filter
       if (search && search.trim() !== "") {
-        endpoint = "/products/search";
+        targetEndpoint = `${endpoint}/search`;
         params.q = search.trim();
       } else if (category && category !== "all") {
-        endpoint = `/products/category/${encodeURIComponent(category)}`;
+        targetEndpoint = `${endpoint}/category/${encodeURIComponent(category)}`;
       }
 
       params.limit = limit;
@@ -43,17 +44,26 @@ export function useProducts(options = {}) {
         params.order = order;
       }
 
-      const response = await axiosClient.get(endpoint, { params });
+      const response = await axiosClient.get(targetEndpoint, { params });
+      const data = response.data;
 
-      setProducts(response.data.products || []);
-      setTotal(response.data.total || 0);
+      // Dynamically extract product/item list from response
+      const key = endpoint.replace(/^\//, "");
+      const items =
+        data[key] ||
+        data.products ||
+        data.data ||
+        (Array.isArray(data) ? data : []);
+
+      setProducts(items);
+      setTotal(data.total || items.length || 0);
     } catch (err) {
-      setError(err?.message || "Failed to fetch products from DummyJSON API.");
+      setError(err?.message || "Failed to fetch data from API.");
       setProducts([]);
     } finally {
       setLoading(false);
     }
-  }, [search, category, limit, skip, sortBy, order]);
+  }, [endpoint, search, category, limit, skip, sortBy, order]);
 
   // Automatically fetch when query parameters change
   useEffect(() => {
