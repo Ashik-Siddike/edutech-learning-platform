@@ -7,12 +7,15 @@ import ContactPage from "./components/ContactPage";
 import ReactHookForm from "./components/ReactHookForm";
 import CartDrawer from "./components/CartDrawer";
 import CheckoutPage from "./components/CheckoutPage";
+import StudentDashboard from "./components/StudentDashboard";
+import CourseDetailsPage from "./components/CourseDetailsPage";
 import Footer from "./components/Footer";
 
 export default function App() {
-  // Navigation state: "home" | "courses" | "products" | "contact" | "form" | "checkout"
+  // Navigation state: "home" | "courses" | "products" | "dashboard" | "course-details" | "contact" | "form" | "checkout"
   const [activeTab, setActiveTab] = useState("home");
   const [prefilledCourse, setPrefilledCourse] = useState("");
+  const [selectedCourseId, setSelectedCourseId] = useState(2);
 
   // Persisted shopping cart state
   const [cart, setCart] = useState(() => {
@@ -30,10 +33,12 @@ export default function App() {
     }, 3200);
   };
 
-  // Switch tabs and optionally prefill course selection
-  const handleNavigation = (tab, courseTitle = "") => {
-    if (courseTitle) {
-      setPrefilledCourse(courseTitle);
+  // Switch tabs and optionally prefill course selection / id
+  const handleNavigation = (tab, courseParam = "") => {
+    if (tab === "course-details" && courseParam) {
+      setSelectedCourseId(courseParam);
+    } else if (courseParam) {
+      setPrefilledCourse(courseParam);
     }
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -108,6 +113,7 @@ export default function App() {
         {activeTab === "courses" && (
           <CoursesPage
             onNavigateToForm={(courseTitle) => handleNavigation("form", courseTitle)}
+            onViewCourseDetails={(courseId) => handleNavigation("course-details", courseId)}
             cart={cart}
             onAddToCart={addToCart}
             onRemoveFromCart={removeFromCart}
@@ -119,6 +125,23 @@ export default function App() {
             cart={cart}
             onAddToCart={addToCart}
             onRemoveFromCart={removeFromCart}
+          />
+        )}
+
+        {activeTab === "dashboard" && (
+          <StudentDashboard
+            onNavigate={handleNavigation}
+            onSelectCourse={(id) => handleNavigation("course-details", id)}
+          />
+        )}
+
+        {activeTab === "course-details" && (
+          <CourseDetailsPage
+            courseId={selectedCourseId}
+            cart={cart}
+            onAddToCart={addToCart}
+            onRemoveFromCart={removeFromCart}
+            onNavigate={handleNavigation}
           />
         )}
 

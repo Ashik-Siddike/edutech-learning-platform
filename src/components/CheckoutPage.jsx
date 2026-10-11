@@ -48,6 +48,25 @@ export default function CheckoutPage({
     WELCOME10: { percent: 10, desc: "10% Welcome Bonus" },
   };
 
+  // Fallback image helper to prevent broken images
+  const getItemImage = (item) => {
+    if (item?.directImage && typeof item.directImage === "string" && item.directImage.startsWith("http")) {
+      return item.directImage;
+    }
+    if (
+      item?.image &&
+      typeof item.image === "string" &&
+      item.image.startsWith("http") &&
+      !item.image.includes("PASTE_YOUR")
+    ) {
+      return item.image;
+    }
+    if (item?.thumbnail && typeof item.thumbnail === "string" && item.thumbnail.startsWith("http")) {
+      return item.thumbnail;
+    }
+    return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=400&auto=format&fit=crop";
+  };
+
   // Cart financial calculations
   const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
   const totalOriginal = cart.reduce(
@@ -215,6 +234,34 @@ export default function CheckoutPage({
         };
 
         setOrderPlaced(invoiceData);
+
+        // Save to localStorage for Student Dashboard
+        try {
+          const prevOrders = JSON.parse(localStorage.getItem("orderHistory") || "[]");
+          localStorage.setItem("orderHistory", JSON.stringify([invoiceData, ...prevOrders]));
+
+          const prevEnrolled = JSON.parse(localStorage.getItem("enrolledCourses") || "[]");
+          const newEnrolledCourses = cart
+            .filter((item) => !String(item.id).startsWith("prod-"))
+            .map((c) => ({
+              ...c,
+              enrolledAt: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+              progress: 25, // Starting progress
+              completedLessons: 4,
+              totalLessons: c.lessonsCount || 40,
+            }));
+
+          const mergedEnrolled = [...prevEnrolled];
+          newEnrolledCourses.forEach((c) => {
+            if (!mergedEnrolled.some((m) => m.id === c.id)) {
+              mergedEnrolled.push(c);
+            }
+          });
+          localStorage.setItem("enrolledCourses", JSON.stringify(mergedEnrolled));
+        } catch (err) {
+          console.warn("Could not save to localStorage:", err);
+        }
+
         if (onClearCart) onClearCart();
         window.scrollTo({ top: 0, behavior: "smooth" });
         if (onShowToast) onShowToast("Order confirmed successfully!");
@@ -287,8 +334,12 @@ export default function CheckoutPage({
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-[#212430] overflow-hidden shrink-0 border border-gray-700 flex items-center justify-center">
                         <img
-                          src={item.directImage || item.image || item.thumbnail}
+                          src={getItemImage(item)}
                           alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=400&auto=format&fit=crop";
+                          }}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -335,8 +386,19 @@ export default function CheckoutPage({
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
+                onClick={() => onNavigate("dashboard")}
+                className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 text-white text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition shadow-lg"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Go to Student Dashboard</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => window.print()}
-                className="flex-1 py-3 px-4 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-200 hover:text-white border border-gray-700 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition"
+                className="py-3 px-4 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-200 hover:text-white border border-gray-700 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -347,10 +409,9 @@ export default function CheckoutPage({
               <button
                 type="button"
                 onClick={() => onNavigate("courses")}
-                className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-[#b0401d] to-[#df5d2c] hover:opacity-95 text-white text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition shadow-lg"
+                className="py-3 px-4 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-300 hover:text-white border border-gray-700 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition"
               >
-                <span>Explore More Courses</span>
-                <span>→</span>
+                <span>Browse More</span>
               </button>
             </div>
           </div>
@@ -745,8 +806,12 @@ export default function CheckoutPage({
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="w-10 h-10 rounded-lg bg-[#14161f] overflow-hidden shrink-0 border border-gray-700 flex items-center justify-center">
                         <img
-                          src={item.directImage || item.image || item.thumbnail}
+                          src={getItemImage(item)}
                           alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src =
+                              "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=400&auto=format&fit=crop";
+                          }}
                           className="w-full h-full object-cover"
                         />
                       </div>

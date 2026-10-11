@@ -30,7 +30,8 @@
     "level": "Intermediate",
     "instructor": "Rahat Chowdhury",
     "description": "Deep dive into React 19, Next.js App Router, Tailwind CSS, Server Actions and State Management.",
-    "image": "PASTE_YOUR_IMGBB_LINK_2"
+    "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1200&auto=format&fit=crop",
+    "directImage": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1200&auto=format&fit=crop"
   },
   {
     "id": 3,

@@ -18,8 +18,9 @@ export default function Navbar({
   // Navigation menu items (clean text labels without emojis)
   const navItems = [
     { id: "home", label: "Home" },
-    { id: "courses", label: "Courses",  },
-    { id: "products", label: "Products", },
+    { id: "courses", label: "Courses" },
+    { id: "products", label: "Products" },
+    { id: "dashboard", label: "My Learning" },
     { id: "contact", label: "Contact" },
     { id: "form", label: "Sign Up" },
   ];

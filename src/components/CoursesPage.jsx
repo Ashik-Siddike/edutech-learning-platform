@@ -6,6 +6,7 @@ import heroBannerImg from "../assets/3D hero image.png";
 
 export default function CoursesPage({
   onNavigateToForm,
+  onViewCourseDetails,
   cart = [],
   onAddToCart,
   onRemoveFromCart,
@@ -314,6 +315,7 @@ export default function CoursesPage({
           onAddToCart={onAddToCart}
           onRemoveFromCart={onRemoveFromCart}
           isInCart={cart.some((item) => item.id === modalCourse.id)}
+          onViewDetails={onViewCourseDetails}
         />
       )}
     </div>

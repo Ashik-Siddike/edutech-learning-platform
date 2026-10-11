@@ -5,6 +5,7 @@ export default function CourseModal({
   onAddToCart,
   onRemoveFromCart,
   isInCart = false,
+  onViewDetails,
 }) {
   if (!course) return null;
 
@@ -177,6 +178,19 @@ export default function CourseModal({
                       <span>Add to Cart</span>
                     </>
                   )}
+                </button>
+              )}
+
+              {onViewDetails && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onViewDetails(course.id);
+                    onClose();
+                  }}
+                  className="px-4 py-2.5 text-xs font-semibold text-gray-200 bg-[#212430] hover:bg-gray-800 rounded-xl border border-gray-700 transition cursor-pointer"
+                >
+                  Full Syllabus &amp; Video →
                 </button>
               )}
 
