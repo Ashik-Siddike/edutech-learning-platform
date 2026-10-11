@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useApiCall from "../hooks/useApiCall";
+import { availableCoupons, validateAndCalculateCoupon } from "../data/couponsData";
 
 export default function CheckoutPage({
   cart = [],
@@ -7,6 +8,9 @@ export default function CheckoutPage({
   onClearCart,
   onNavigate,
   onShowToast,
+  appliedCoupon = null,
+  onApplyCoupon,
+  onRemoveCoupon,
 }) {
   // Order submission API call hook
   const orderApi = useApiCall();
@@ -35,18 +39,11 @@ export default function CheckoutPage({
 
   // Coupon state
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState("");
+  const [showAvailableCoupons, setShowAvailableCoupons] = useState(false);
 
   // Completed order invoice state
   const [orderPlaced, setOrderPlaced] = useState(null);
-
-  // Available valid coupons
-  const validCoupons = {
-    EDUTECH20: { percent: 20, desc: "20% Instant Discount on All Courses & Store" },
-    SUFFEX500: { flat: 500, desc: "৳500 Flat Student Discount" },
-    WELCOME10: { percent: 10, desc: "10% Welcome Bonus" },
-  };
 
   // Fallback image helper to prevent broken images
   const getItemImage = (item) => {
@@ -79,13 +76,12 @@ export default function CheckoutPage({
   const hasPhysicalProducts = cart.some((item) => String(item.id).startsWith("prod-"));
   const shippingFee = hasPhysicalProducts ? 60 : 0; // Free for digital courses
 
-  // Coupon discount calculation
+  // Coupon discount calculation using centralized validation engine
   let couponDiscount = 0;
   if (appliedCoupon) {
-    if (appliedCoupon.percent) {
-      couponDiscount = Math.round((subtotal * appliedCoupon.percent) / 100);
-    } else if (appliedCoupon.flat) {
-      couponDiscount = Math.min(subtotal, appliedCoupon.flat);
+    const calc = validateAndCalculateCoupon(appliedCoupon.code, subtotal);
+    if (calc.isValid) {
+      couponDiscount = calc.discount;
     }
   }
 
@@ -110,39 +106,42 @@ export default function CheckoutPage({
   const handleApplyCoupon = (e) => {
     e?.preventDefault();
     setCouponError("");
-    const cleanedCode = couponInput.trim().toUpperCase();
+    const cleanedCode = couponInput.trim();
 
     if (!cleanedCode) {
       setCouponError("Please enter a valid coupon code.");
       return;
     }
 
-    if (validCoupons[cleanedCode]) {
-      setAppliedCoupon({
-        code: cleanedCode,
-        ...validCoupons[cleanedCode],
-      });
+    const result = validateAndCalculateCoupon(cleanedCode, subtotal);
+    if (result.isValid && onApplyCoupon) {
+      onApplyCoupon(result.coupon);
       setCouponInput("");
-      if (onShowToast) onShowToast(`Coupon "${cleanedCode}" applied successfully!`);
+      setCouponError("");
+      if (onShowToast) onShowToast(result.message);
     } else {
-      setCouponError("Invalid coupon code. Try 'EDUTECH20' or 'SUFFEX500'");
+      setCouponError(result.message);
     }
   };
 
   // Quick coupon apply helper
   const handleQuickCoupon = (code) => {
-    setCouponInput(code);
     setCouponError("");
-    setAppliedCoupon({
-      code,
-      ...validCoupons[code],
-    });
-    if (onShowToast) onShowToast(`Coupon "${code}" applied!`);
+    const result = validateAndCalculateCoupon(code, subtotal);
+    if (result.isValid && onApplyCoupon) {
+      onApplyCoupon(result.coupon);
+      setCouponInput("");
+      if (onShowToast) onShowToast(result.message);
+    } else {
+      setCouponError(result.message);
+    }
   };
 
-  // Remove applied coupon
+  // Remove / Clear applied coupon
   const handleRemoveCoupon = () => {
-    setAppliedCoupon(null);
+    if (onRemoveCoupon) {
+      onRemoveCoupon();
+    }
     setCouponError("");
   };
 
@@ -841,63 +840,139 @@ export default function CheckoutPage({
               </div>
 
               {/* Coupon Box */}
-              <div className="pt-2 border-t border-gray-800 space-y-2">
-                <label className="text-xs font-semibold text-gray-300 block">Have a Promo Coupon?</label>
-                {appliedCoupon ? (
-                  <div className="p-3 rounded-xl bg-emerald-950/50 border border-emerald-700/60 flex items-center justify-between text-xs">
-                    <div>
-                      <div className="flex items-center gap-1.5 text-emerald-400 font-bold font-mono">
-                        <span>✓</span>
-                        <span>{appliedCoupon.code}</span>
-                      </div>
-                      <span className="text-[11px] text-gray-300 block">{appliedCoupon.desc}</span>
-                    </div>
+              <div className="pt-2 border-t border-gray-800 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-300 block">
+                    Have a Promo Coupon?
+                  </label>
+                  {appliedCoupon && (
                     <button
                       type="button"
                       onClick={handleRemoveCoupon}
-                      className="text-xs text-rose-400 hover:underline cursor-pointer ml-2"
+                      className="text-[11px] font-semibold text-rose-400 hover:text-rose-300 hover:underline flex items-center gap-1 cursor-pointer transition"
+                      title="Clear applied coupon"
+                    >
+                      <span>✕ Clear Coupon</span>
+                    </button>
+                  )}
+                </div>
+
+                {appliedCoupon ? (
+                  <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-600/40 flex items-center justify-between text-xs shadow-inner">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold">
+                          ✓
+                        </span>
+                        <span className="text-emerald-300 font-bold font-mono text-sm tracking-wide">
+                          {appliedCoupon.code}
+                        </span>
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-700/60">
+                          -৳{couponDiscount.toLocaleString()} Saved
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-gray-300 pl-7 leading-relaxed">
+                        {appliedCoupon.description || appliedCoupon.desc || "Promo discount applied"}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="px-2.5 py-1.5 rounded-lg bg-rose-950/50 hover:bg-rose-900/60 border border-rose-800/60 text-rose-300 hover:text-rose-200 text-[11px] font-semibold cursor-pointer transition shrink-0 ml-2"
                     >
                       Remove
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={couponInput}
-                      onChange={(e) => setCouponInput(e.target.value)}
-                      placeholder="e.g. EDUTECH20"
-                      className="flex-1 px-3 py-2 rounded-xl bg-[#212430] border border-gray-700 text-xs text-white placeholder-gray-500 uppercase font-mono focus:outline-none focus:border-orange-500"
-                    />
-                    <button
-                      type="submit"
-                      className="px-4 py-2 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] border border-gray-600 text-xs font-semibold text-white transition cursor-pointer"
-                    >
-                      Apply
-                    </button>
-                  </form>
-                )}
+                  <div className="space-y-2">
+                    <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value)}
+                        placeholder="Enter Promo Code (e.g. EDUTECH20)"
+                        className="flex-1 px-3.5 py-2 rounded-xl bg-[#212430] border border-gray-700 text-xs text-white placeholder-gray-500 uppercase font-mono focus:outline-none focus:border-orange-500 transition"
+                      />
+                      <button
+                        type="submit"
+                        className="px-4 py-2 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] border border-gray-600 text-xs font-semibold text-white transition cursor-pointer shadow-sm active:scale-95"
+                      >
+                        Apply
+                      </button>
+                    </form>
 
-                {couponError && <p className="text-[11px] text-rose-400">{couponError}</p>}
+                    {couponError && (
+                      <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                        <span>⚠</span>
+                        <span>{couponError}</span>
+                      </p>
+                    )}
 
-                {/* Quick Coupon Badges */}
-                {!appliedCoupon && (
-                  <div className="flex items-center gap-2 pt-1 flex-wrap text-[10px]">
-                    <span className="text-gray-400">Try:</span>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickCoupon("EDUTECH20")}
-                      className="px-2 py-0.5 rounded bg-orange-950/70 border border-orange-800 text-orange-300 hover:bg-orange-900 cursor-pointer transition font-mono font-bold"
-                    >
-                      EDUTECH20 (20% Off)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickCoupon("SUFFEX500")}
-                      className="px-2 py-0.5 rounded bg-orange-950/70 border border-orange-800 text-orange-300 hover:bg-orange-900 cursor-pointer transition font-mono font-bold"
-                    >
-                      SUFFEX500 (৳500 Off)
-                    </button>
+                    {/* Quick Coupon Badges & Toggle */}
+                    <div className="pt-1">
+                      <div className="flex items-center justify-between text-[11px] text-gray-400 mb-1.5">
+                        <span className="flex items-center gap-1 text-orange-400 font-medium">
+                          <span>🎁 Available Promo Codes</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setShowAvailableCoupons((prev) => !prev)}
+                          className="text-gray-400 hover:text-white underline cursor-pointer text-[10px]"
+                        >
+                          {showAvailableCoupons ? "Hide" : "Show All"}
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {availableCoupons.slice(0, 2).map((c) => (
+                          <button
+                            key={c.code}
+                            type="button"
+                            onClick={() => handleQuickCoupon(c.code)}
+                            className="px-2 py-1 rounded-lg bg-orange-950/60 border border-orange-800/60 text-orange-300 hover:bg-orange-900/60 cursor-pointer transition text-[10px] font-mono font-bold flex items-center gap-1 active:scale-95"
+                          >
+                            <span>{c.code}</span>
+                            <span className="text-[9px] text-orange-200/80 font-sans font-normal">
+                              ({c.type === "percentage" ? `${c.value}% Off` : `৳${c.value} Off`})
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+
+                      {showAvailableCoupons && (
+                        <div className="mt-2 space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                          {availableCoupons.map((c) => (
+                            <div
+                              key={c.code}
+                              className="p-2 rounded-xl bg-[#212430] border border-gray-700/80 flex items-center justify-between gap-2"
+                            >
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-mono font-bold text-white text-[11px]">
+                                    {c.code}
+                                  </span>
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-orange-950 text-orange-300 border border-orange-800">
+                                    {c.badge}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] text-gray-400 block truncate">
+                                  {c.description}
+                                </span>
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => handleQuickCoupon(c.code)}
+                                className="px-2.5 py-1 rounded-lg bg-[#df5d2c] hover:bg-orange-600 text-white text-[10px] font-semibold cursor-pointer shrink-0 transition"
+                              >
+                                Apply
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

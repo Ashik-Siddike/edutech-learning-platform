@@ -22,6 +22,17 @@ export default function App() {
     const saved = localStorage.getItem("cart");
     return saved ? JSON.parse(saved) : [];
   });
+
+  // Persisted applied coupon state
+  const [appliedCoupon, setAppliedCoupon] = useState(() => {
+    try {
+      const saved = localStorage.getItem("appliedCoupon");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
@@ -66,10 +77,33 @@ export default function App() {
     );
   };
 
+  // Apply coupon globally
+  const handleApplyCoupon = (coupon) => {
+    setAppliedCoupon(coupon);
+    try {
+      localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
+    } catch (e) {
+      console.warn(e);
+    }
+    showToast(`Coupon "${coupon.code}" applied!`);
+  };
+
+  // Remove applied coupon globally
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    try {
+      localStorage.removeItem("appliedCoupon");
+    } catch (e) {
+      console.warn(e);
+    }
+    showToast("Coupon removed.");
+  };
+
   // Clear all items in cart
   const clearCart = () => {
     setCart([]);
     localStorage.removeItem("cart");
+    handleRemoveCoupon();
     showToast("Cleared shopping cart.");
   };
 
@@ -164,6 +198,9 @@ export default function App() {
             onClearCart={clearCart}
             onNavigate={handleNavigation}
             onShowToast={showToast}
+            appliedCoupon={appliedCoupon}
+            onApplyCoupon={handleApplyCoupon}
+            onRemoveCoupon={handleRemoveCoupon}
           />
         )}
       </main>
@@ -183,6 +220,9 @@ export default function App() {
           handleNavigation("courses");
           setIsCartOpen(false);
         }}
+        appliedCoupon={appliedCoupon}
+        onApplyCoupon={handleApplyCoupon}
+        onRemoveCoupon={handleRemoveCoupon}
       />
     </div>
   );
