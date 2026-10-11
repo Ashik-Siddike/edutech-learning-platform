@@ -6,10 +6,11 @@ import ProductsPage from "./components/ProductsPage";
 import ContactPage from "./components/ContactPage";
 import ReactHookForm from "./components/ReactHookForm";
 import CartDrawer from "./components/CartDrawer";
+import CheckoutPage from "./components/CheckoutPage";
 import Footer from "./components/Footer";
 
 export default function App() {
-  // Navigation state: "home" | "courses" | "products" | "contact" | "form"
+  // Navigation state: "home" | "courses" | "products" | "contact" | "form" | "checkout"
   const [activeTab, setActiveTab] = useState("home");
   const [prefilledCourse, setPrefilledCourse] = useState("");
 
@@ -67,17 +68,10 @@ export default function App() {
     showToast("Cleared shopping cart.");
   };
 
-  // Demo checkout: shows success toast without requiring payment
+  // Navigate to the checkout page from CartDrawer
   const handleCheckout = () => {
-    const count = cart.length;
-    setCart([]);
-    localStorage.removeItem("cart");
     setIsCartOpen(false);
-    showToast(
-      `Checkout successful! Enrolled in ${count} ${
-        count === 1 ? "course" : "courses"
-      }. (Demo mode - No payment required)`
-    );
+    handleNavigation("checkout");
   };
 
   return (
@@ -138,6 +132,16 @@ export default function App() {
               <ReactHookForm initialCourse={prefilledCourse} />
             </div>
           </div>
+        )}
+
+        {activeTab === "checkout" && (
+          <CheckoutPage
+            cart={cart}
+            onRemoveFromCart={removeFromCart}
+            onClearCart={clearCart}
+            onNavigate={handleNavigation}
+            onShowToast={showToast}
+          />
         )}
       </main>
 
