@@ -21,10 +21,11 @@ export function useProduct(productId) {
       return;
     }
 
+    const cleanId = String(productId).replace(/^prod-/, "");
     apiFetcher({
       options: {
         method: "GET",
-        url: `/products/${productId}`,
+        url: `/products/${cleanId}`,
       },
     });
   }, [productId, apiFetcher, handleReset]);

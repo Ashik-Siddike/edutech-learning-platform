@@ -51,7 +51,10 @@ export default function App() {
 
   // Add item to cart and sync with localStorage
   const addToCart = (product) => {
-    const exists = cart.some((c) => c.id === product.id);
+    const cleanId = String(product.id).replace(/^prod-/, "");
+    const exists = cart.some(
+      (c) => c.id === product.id || String(c.id).replace(/^prod-/, "") === cleanId
+    );
     if (!exists) {
       const updated = [...cart, product];
       setCart(updated);
@@ -64,8 +67,13 @@ export default function App() {
 
   // Remove specific item from cart
   const removeFromCart = (productId) => {
-    const removedItem = cart.find((c) => c.id === productId);
-    const updated = cart.filter((c) => c.id !== productId);
+    const cleanId = String(productId).replace(/^prod-/, "");
+    const removedItem = cart.find(
+      (c) => c.id === productId || String(c.id).replace(/^prod-/, "") === cleanId
+    );
+    const updated = cart.filter(
+      (c) => c.id !== productId && String(c.id).replace(/^prod-/, "") !== cleanId
+    );
     setCart(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
     showToast(

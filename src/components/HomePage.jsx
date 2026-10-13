@@ -1,5 +1,8 @@
 import { useState } from "react";
 import heroImg from "../assets/3D hero image.png";
+import useProducts from "../hooks/useProducts";
+import ProductCard from "./ProductCard";
+import ProductModal from "./ProductModal";
 import {
   Sparkles,
   ShoppingBag,
@@ -20,12 +23,37 @@ import {
   Zap,
   Search,
   CheckCircle2,
+  Eye,
+  Loader2,
+  PackageSearch,
 } from "lucide-react";
 
 export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveFromCart }) {
   const [copiedCode, setCopiedCode] = useState(null);
   const [activeSpotlight, setActiveSpotlight] = useState(0);
   const [heroSearch, setHeroSearch] = useState("");
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [activeCatalogCategory, setActiveCatalogCategory] = useState("all");
+
+  // Fetch live products for landing page catalog
+  const {
+    products: catalogProducts,
+    loading: catalogLoading,
+    error: catalogError,
+    refetch: refetchCatalog,
+  } = useProducts({
+    category: activeCatalogCategory === "all" ? "" : activeCatalogCategory,
+    limit: 8,
+  });
+
+  const catalogTabs = [
+    { id: "all", label: "🔥 All Trending" },
+    { id: "smartphones", label: "📱 Smartphones" },
+    { id: "laptops", label: "💻 Laptops" },
+    { id: "mobile-accessories", label: "⚡ Accessories" },
+    { id: "fragrances", label: "✨ Fragrances" },
+    { id: "beauty", label: "💄 Beauty" },
+  ];
 
   const handleCopyCode = (code) => {
     navigator.clipboard?.writeText(code);
@@ -40,31 +68,39 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
     }
   };
 
+  const handleCategoryClick = (catId) => {
+    setActiveCatalogCategory(catId);
+    const catalogEl = document.getElementById("featured-catalog");
+    if (catalogEl) {
+      catalogEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const heroSpotlights = [
     {
-      id: "spotlight-iphone",
+      id: 123,
       category: "smartphones",
       badge: "FLAGSHIP SMARTPHONE",
-      title: "Apple iPhone 15 Pro Max 256GB",
-      tagline: "Aerospace Titanium • A17 Pro 3nm",
-      specs: ["Titanium Chassis", "A17 Pro Chip", "48MP Main Sensor", "Action Button"],
-      priceBDT: 154999,
-      originalPriceBDT: 178000,
-      discount: "13% OFF",
+      title: "Apple iPhone 13 Pro 256GB",
+      tagline: "Aerospace Titanium • Super Retina XDR",
+      specs: ["A15 Bionic 5-Core GPU", "Super Retina XDR with ProMotion", "12MP Pro Camera System", "Ceramic Shield"],
+      priceBDT: 131999,
+      originalPriceBDT: 145000,
+      discount: "9% OFF",
       rating: 4.9,
       reviews: "1.2k+ reviews",
-      image: "https://cdn.dummyjson.com/products/images/smartphones/iPhone%205s/thumbnail.png",
+      image: "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/thumbnail.webp",
       tag: "Top Flagship",
     },
     {
-      id: "spotlight-macbook",
+      id: 78,
       category: "laptops",
       badge: "PRO WORKSTATION",
-      title: "Apple MacBook Pro 16\" M3 Max",
-      tagline: "Liquid Retina XDR • 36GB Unified RAM",
-      specs: ["M3 Max 14-Core", "Liquid Retina XDR", "36GB Memory", "22h Battery"],
-      priceBDT: 349999,
-      originalPriceBDT: 389000,
+      title: "Apple MacBook Pro 14 Inch Space Grey",
+      tagline: "Liquid Retina XDR • 16GB Unified RAM",
+      specs: ["Apple M-Series Silicon", "Liquid Retina XDR", "16GB Unified Memory", "MagSafe Fast Charging"],
+      priceBDT: 239999,
+      originalPriceBDT: 265000,
       discount: "10% OFF",
       rating: 5.0,
       reviews: "850+ reviews",
@@ -72,18 +108,18 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
       tag: "Pro Studio",
     },
     {
-      id: "spotlight-sony",
-      category: "electronics",
+      id: 101,
+      category: "mobile-accessories",
       badge: "FLAGSHIP AUDIO",
-      title: "Sony WH-1000XM5 Wireless Noise-Canceling",
-      tagline: "Dual Processors • 30h Long Playtime",
-      specs: ["Auto NC Optimizer", "30h Playtime", "Speak-to-Chat", "Multipoint Connect"],
-      priceBDT: 38500,
-      originalPriceBDT: 45000,
-      discount: "15% OFF",
+      title: "Apple AirPods Max Silver",
+      tagline: "Active Noise Cancellation • Spatial Audio",
+      specs: ["High-Fidelity Audio", "Active Noise Cancellation", "Transparency Mode", "20h Battery Life"],
+      priceBDT: 65900,
+      originalPriceBDT: 72000,
+      discount: "8% OFF",
       rating: 4.9,
       reviews: "3.8k+ reviews",
-      image: "https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/thumbnail.png",
+      image: "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/thumbnail.webp",
       tag: "Signature Sound",
     },
   ];
@@ -194,7 +230,14 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
     },
   ];
 
-  const isItemInCart = (id) => cart.some((c) => c.id === id);
+  const isItemInCart = (id) => {
+    if (!id) return false;
+    const clean = String(id).replace(/^prod-/, "");
+    return cart.some((c) => {
+      const cClean = String(c.id).replace(/^prod-/, "");
+      return cClean === clean || c.id === id;
+    });
+  };
 
   return (
     <div className="w-full text-slate-100 overflow-hidden bg-ambient-mesh">
@@ -319,7 +362,11 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                     {currentSpotlight.discount}
                   </span>
                 </div>
-                <h4 className="text-sm font-bold text-white font-['Outfit'] line-clamp-1">
+                <h4
+                  onClick={() => setSelectedProductId(currentSpotlight.id)}
+                  className="text-sm font-bold text-white font-['Outfit'] line-clamp-1 hover:text-orange-400 transition-colors cursor-pointer"
+                  title="Click to view full specs & closure pricing"
+                >
                   {currentSpotlight.title}
                 </h4>
                 <div className="flex items-baseline gap-2 justify-center sm:justify-start">
@@ -335,25 +382,37 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  onAddToCart({
-                    id: currentSpotlight.id,
-                    title: currentSpotlight.title,
-                    price: currentSpotlight.priceBDT,
-                    originalPrice: currentSpotlight.originalPriceBDT,
-                    image: currentSpotlight.image,
-                    directImage: heroImg,
-                    category: currentSpotlight.category,
-                    brand: "Apple / Flagship",
-                  });
-                }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg shadow-orange-950/40 hover:scale-105 active:scale-95 transition cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
-              >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                <span>{cart.some((c) => c.id === currentSpotlight.id) ? "In Cart ✓" : "Add Spotlight to Cart"}</span>
-              </button>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setSelectedProductId(currentSpotlight.id)}
+                  className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.15] text-white text-xs font-semibold hover:border-orange-500/40 transition cursor-pointer shrink-0 flex items-center justify-center gap-1.5 shadow-sm"
+                  title="Quick View Specs & Closure Price"
+                >
+                  <Eye className="w-3.5 h-3.5 text-orange-400" />
+                  <span>View Specs</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onAddToCart({
+                      id: `prod-${currentSpotlight.id}`,
+                      title: currentSpotlight.title,
+                      price: currentSpotlight.priceBDT,
+                      originalPrice: currentSpotlight.originalPriceBDT,
+                      image: currentSpotlight.image,
+                      directImage: heroImg,
+                      category: currentSpotlight.category,
+                      brand: "Apple / Flagship",
+                    });
+                  }}
+                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg shadow-orange-950/40 hover:scale-105 active:scale-95 transition cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5" />
+                  <span>{isItemInCart(currentSpotlight.id) ? "In Cart ✓" : "Add to Cart"}</span>
+                </button>
+              </div>
             </div>
 
             {/* Social Proof & Customer Count Row */}
@@ -528,7 +587,7 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
           {shopCategories.map((cat) => (
             <div
               key={cat.id}
-              onClick={() => onNavigate("products")}
+              onClick={() => handleCategoryClick(cat.id)}
               className={`group relative rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#13192c] to-[#0d1222] border border-white/[0.08] ${cat.borderGlow} hover:-translate-y-1.5 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between`}
             >
               <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -548,6 +607,115 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ========================================================
+          FEATURED PRODUCTS CATALOG: Live API Storefront
+         ======================================================== */}
+      <section id="featured-catalog" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.06]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>LIVE STORE CATALOG</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-['Outfit'] tracking-tight">
+              Featured Trending Products
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              Click any product to view real-time specs, customer reviews, and interactive JS closure pricing directly on this landing page.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => onNavigate("products")}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.05] hover:bg-orange-500/20 text-xs font-semibold text-slate-300 hover:text-orange-400 border border-white/[0.1] hover:border-orange-500/30 transition cursor-pointer self-start md:self-auto"
+          >
+            <span>Explore All 1,000+ Items</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
+          {catalogTabs.map((tab) => {
+            const isActive = activeCatalogCategory === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveCatalogCategory(tab.id)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 border ${
+                  isActive
+                    ? "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white border-transparent shadow-lg shadow-orange-950/40"
+                    : "bg-[#121829] text-slate-400 border-white/[0.08] hover:text-white hover:border-white/[0.2]"
+                }`}
+              >
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Catalog Grid */}
+        {catalogLoading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 py-8">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="h-80 rounded-2xl bg-[#121829]/60 border border-white/[0.05] animate-pulse p-4 flex flex-col justify-between"
+              >
+                <div className="w-full aspect-[4/3] bg-white/[0.04] rounded-xl" />
+                <div className="space-y-2 mt-4">
+                  <div className="h-4 bg-white/[0.04] rounded w-3/4" />
+                  <div className="h-3 bg-white/[0.03] rounded w-1/2" />
+                  <div className="h-4 bg-white/[0.05] rounded w-1/3 mt-2" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : catalogError ? (
+          <div className="p-8 text-center rounded-2xl bg-[#121829] border border-red-500/20 my-6">
+            <p className="text-sm text-red-400 mb-3">{catalogError}</p>
+            <button
+              onClick={refetchCatalog}
+              className="px-4 py-2 rounded-xl bg-orange-600 text-white text-xs font-bold hover:bg-orange-500 cursor-pointer"
+            >
+              Retry
+            </button>
+          </div>
+        ) : catalogProducts.length === 0 ? (
+          <div className="p-12 text-center rounded-2xl bg-[#121829] border border-white/[0.06] text-slate-400">
+            <PackageSearch className="w-10 h-10 mx-auto text-slate-500 mb-2" />
+            <p className="text-sm">No products found in this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {catalogProducts.map((prod) => (
+              <ProductCard
+                key={prod.id}
+                product={prod}
+                isInCart={isItemInCart(prod.id)}
+                onAddToCart={onAddToCart}
+                onRemoveFromCart={onRemoveFromCart}
+                onViewDetails={(p) => setSelectedProductId(p.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* View full store inventory button */}
+        <div className="mt-10 text-center">
+          <button
+            type="button"
+            onClick={() => onNavigate("products")}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#12182a] hover:bg-[#161f36] border border-white/[0.1] hover:border-orange-500/40 text-xs sm:text-sm font-bold text-white shadow-xl transition-all cursor-pointer group"
+          >
+            <span>Browse Full Store With Filters &amp; Pagination</span>
+            <ArrowRight className="w-4 h-4 text-orange-400 group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
       </section>
 
@@ -583,7 +751,8 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
               return (
                 <div
                   key={deal.id}
-                  className="group bg-[#0e1424]/90 rounded-2xl border border-white/[0.08] hover:border-orange-500/40 p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                  onClick={() => setSelectedProductId(deal.id)}
+                  className="group bg-[#0e1424]/90 rounded-2xl border border-white/[0.08] hover:border-orange-500/40 p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg cursor-pointer"
                 >
                   <div className="relative aspect-square rounded-xl bg-black/30 p-3 mb-3 flex items-center justify-center overflow-hidden">
                     <span className="absolute top-2 left-2 z-10 text-[10px] font-bold text-white bg-rose-600 px-2 py-0.5 rounded-md shadow-sm">
@@ -594,6 +763,13 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                       alt={deal.title}
                       className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
                     />
+                    {/* Hover Quick View Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs pointer-events-none">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 text-white text-xs font-semibold backdrop-blur-md">
+                        <Eye className="w-3.5 h-3.5 text-orange-400" />
+                        <span>Quick View</span>
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -605,7 +781,7 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                       </div>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white line-clamp-1 font-['Outfit']">
+                    <h4 className="text-sm font-bold text-white line-clamp-1 font-['Outfit'] group-hover:text-orange-400 transition-colors">
                       {deal.title}
                     </h4>
 
@@ -619,41 +795,56 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                       </span>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (inCart) {
-                          onRemoveFromCart(deal.id);
-                        } else {
-                          onAddToCart({
-                            id: deal.id,
-                            title: deal.title,
-                            price: deal.price,
-                            originalPrice: deal.originalPrice,
-                            image: deal.image,
-                            category: deal.category,
-                            brand: deal.brand,
-                          });
-                        }
-                      }}
-                      className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2 ${
-                        inCart
-                          ? "bg-emerald-600/90 text-white shadow-emerald-950/40"
-                          : "bg-white/[0.08] hover:bg-gradient-to-r hover:from-[#df5d2c] hover:to-[#ff7849] text-white hover:shadow-lg"
-                      }`}
-                    >
-                      {inCart ? (
-                        <>
-                          <Check className="w-3.5 h-3.5" />
-                          <span>In Cart</span>
-                        </>
-                      ) : (
-                        <>
-                          <ShoppingBag className="w-3.5 h-3.5" />
-                          <span>Add to Cart</span>
-                        </>
-                      )}
-                    </button>
+                    <div className="flex items-center gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedProductId(deal.id);
+                        }}
+                        className="p-2.5 rounded-xl bg-white/[0.05] hover:bg-orange-500/20 text-slate-300 hover:text-orange-400 border border-white/[0.1] hover:border-orange-500/30 transition cursor-pointer"
+                        title="Quick View Product Details & Closure Price"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (inCart) {
+                            onRemoveFromCart(deal.id);
+                          } else {
+                            onAddToCart({
+                              id: deal.id,
+                              title: deal.title,
+                              price: deal.price,
+                              originalPrice: deal.originalPrice,
+                              image: deal.image,
+                              category: deal.category,
+                              brand: deal.brand,
+                            });
+                          }
+                        }}
+                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                          inCart
+                            ? "bg-emerald-600/90 text-white shadow-emerald-950/40"
+                            : "bg-white/[0.08] hover:bg-gradient-to-r hover:from-[#df5d2c] hover:to-[#ff7849] text-white hover:shadow-lg"
+                        }`}
+                      >
+                        {inCart ? (
+                          <>
+                            <Check className="w-3.5 h-3.5" />
+                            <span>In Cart</span>
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingBag className="w-3.5 h-3.5" />
+                            <span>Add to Cart</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -885,6 +1076,17 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
           </div>
         </div>
       </section>
+
+      {/* Quick View Product Modal with JS Closure Price Calculation */}
+      {selectedProductId && (
+        <ProductModal
+          productId={selectedProductId}
+          onClose={() => setSelectedProductId(null)}
+          isInCart={isItemInCart(selectedProductId)}
+          onAddToCart={onAddToCart}
+          onRemoveFromCart={onRemoveFromCart}
+        />
+      )}
     </div>
   );
 }
