@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
+import BottomNav from "./components/BottomNav";
 import HomePage from "./components/HomePage";
 import ProductsPage from "./components/ProductsPage";
 import ContactPage from "./components/ContactPage";
@@ -121,7 +122,7 @@ export default function App() {
     <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-sans relative selection:bg-[#df5d2c]/30 selection:text-orange-200">
       {/* Toast notification banner */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#161d30]/95 backdrop-blur-xl text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-orange-500/40 text-xs font-semibold animate-bounce max-w-sm">
+        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 bg-[#161d30]/95 backdrop-blur-xl text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-orange-500/40 text-xs font-semibold animate-bounce max-w-sm">
           <div className="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
             ✓
           </div>
@@ -138,7 +139,7 @@ export default function App() {
       />
 
       {/* Main page content */}
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full pb-20 md:pb-0">
         {activeTab === "home" && (
           <HomePage
             onNavigate={handleNavigation}
@@ -180,6 +181,14 @@ export default function App() {
 
       {/* Footer across all pages */}
       <Footer onNavigate={handleNavigation} />
+
+      {/* Floating Bottom Navigation Bar for Mobile */}
+      <BottomNav
+        activeTab={activeTab}
+        setActiveTab={handleNavigation}
+        cartCount={cart.length}
+        onOpenCart={() => setIsCartOpen(true)}
+      />
 
       {/* Slide-over shopping cart drawer */}
       <CartDrawer

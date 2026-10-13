@@ -254,7 +254,7 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             
             {/* Top Interactive Flagship Switcher Pills */}
-            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#12182a]/90 border border-white/[0.1] backdrop-blur-xl shadow-xl mx-auto lg:mx-0">
+            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#12182a]/90 border border-white/[0.1] backdrop-blur-xl shadow-xl mx-auto lg:mx-0 max-w-full overflow-x-auto scrollbar-none">
               {heroSpotlights.map((item, idx) => {
                 const isSelected = activeSpotlight === idx;
                 return (
@@ -262,7 +262,7 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                     key={item.id}
                     type="button"
                     onClick={() => setActiveSpotlight(idx)}
-                    className={`px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 ${
                       isSelected
                         ? "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white shadow-lg shadow-orange-950/50"
                         : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
@@ -276,14 +276,14 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
 
             {/* Glowing Architecture Eyebrow */}
             <div className="flex items-center justify-center lg:justify-start gap-2">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500/15 via-orange-500/10 to-transparent border border-orange-500/30 text-orange-400 text-xs font-semibold shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-orange-500/15 via-orange-500/10 to-transparent border border-orange-500/30 text-orange-400 text-[11px] sm:text-xs font-semibold shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                 <span className="font-['Outfit'] tracking-wider uppercase">OFFICIAL STORE BD • 2026 ARCHITECTURE</span>
               </div>
             </div>
 
             {/* Display Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-['Outfit'] tracking-tight leading-[1.06] text-white">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-['Outfit'] tracking-tight leading-[1.08] text-white">
               Where Technology Meets{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
                 Pure Luxury.
@@ -475,43 +475,43 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
               </div>
 
               {/* Floating Glassmorphic Micro-HUD 1: Trust Score */}
-              <div className="absolute -top-4 -left-3 sm:-left-6 px-3.5 py-2 rounded-2xl bg-[#0e1424]/90 border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-2.5 animate-float-reverse">
-                <div className="w-7 h-7 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
-                  <ShieldCheck className="w-4 h-4" />
+              <div className="absolute -top-3 left-0 sm:-left-6 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-[#0e1424]/90 border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-2 sm:gap-2.5 animate-float-reverse scale-90 sm:scale-100 origin-left">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div className="leading-tight">
-                  <span className="text-[11px] font-extrabold text-white font-['Outfit'] block">
+                  <span className="text-[10px] sm:text-[11px] font-extrabold text-white font-['Outfit'] block">
                     100% Genuine BD
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-semibold">
+                  <span className="text-[9px] sm:text-[10px] text-emerald-400 font-semibold">
                     Official 1-Yr Warranty
                   </span>
                 </div>
               </div>
 
               {/* Floating Glassmorphic Micro-HUD 2: Flash Voucher */}
-              <div className="absolute top-1/3 -right-3 sm:-right-6 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-2xl flex items-center gap-2.5 animate-float-slow">
-                <Zap className="w-4 h-4 fill-white" />
+              <div className="absolute top-1/4 right-0 sm:-right-6 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-2xl flex items-center gap-2 sm:gap-2.5 animate-float-slow scale-90 sm:scale-100 origin-right">
+                <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white shrink-0" />
                 <div className="leading-tight text-left">
-                  <span className="text-[11px] font-black font-['Outfit'] block">
+                  <span className="text-[10px] sm:text-[11px] font-black font-['Outfit'] block">
                     EXTRA 20% OFF
                   </span>
-                  <span className="text-[10px] text-orange-100 font-mono tracking-wider font-bold">
+                  <span className="text-[9px] sm:text-[10px] text-orange-100 font-mono tracking-wider font-bold">
                     CODE: STORE20
                   </span>
                 </div>
               </div>
 
               {/* Floating Glassmorphic Micro-HUD 3: Express Delivery Route */}
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-2xl bg-[#0e1424]/95 border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-3 w-max">
-                <div className="w-7 h-7 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center animate-pulse">
-                  <Truck className="w-4 h-4" />
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[#0e1424]/95 border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-2.5 sm:gap-3 w-max max-w-[95%] scale-90 sm:scale-100">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center animate-pulse shrink-0">
+                  <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
                 <div className="leading-tight text-left">
-                  <span className="text-[11px] font-bold text-white font-['Outfit'] block">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-white font-['Outfit'] block">
                     Express 24h Delivery
                   </span>
-                  <span className="text-[10px] text-slate-400">
+                  <span className="text-[9px] sm:text-[10px] text-slate-400 truncate">
                     Dhanmondi Hub ➔ Your Doorstep
                   </span>
                 </div>
@@ -583,25 +583,25 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
         </div>
 
         {/* 6 Category Tiles */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
           {shopCategories.map((cat) => (
             <div
               key={cat.id}
               onClick={() => handleCategoryClick(cat.id)}
-              className={`group relative rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#13192c] to-[#0d1222] border border-white/[0.08] ${cat.borderGlow} hover:-translate-y-1.5 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between`}
+              className={`group relative rounded-2xl p-3.5 sm:p-5 bg-gradient-to-b from-[#13192c] to-[#0d1222] border border-white/[0.08] ${cat.borderGlow} hover:-translate-y-1.5 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between`}
             >
-              <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                 {cat.icon}
               </div>
 
               <div>
-                <h3 className="text-sm font-bold text-white font-['Outfit'] group-hover:text-orange-400 transition-colors">
+                <h3 className="text-xs sm:text-sm font-bold text-white font-['Outfit'] group-hover:text-orange-400 transition-colors">
                   {cat.label}
                 </h3>
-                <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                <p className="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">
                   {cat.subtitle}
                 </p>
-                <span className="inline-block mt-3 text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white/[0.05] text-slate-300">
+                <span className="inline-block mt-2 sm:mt-3 text-[9px] sm:text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white/[0.05] text-slate-300">
                   {cat.count}
                 </span>
               </div>
@@ -745,17 +745,17 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
           </div>
 
           {/* Deal Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {featuredDeals.map((deal) => {
               const inCart = isItemInCart(deal.id);
               return (
                 <div
                   key={deal.id}
                   onClick={() => setSelectedProductId(deal.id)}
-                  className="group bg-[#0e1424]/90 rounded-2xl border border-white/[0.08] hover:border-orange-500/40 p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg cursor-pointer"
+                  className="group bg-[#0e1424]/90 rounded-xl sm:rounded-2xl border border-white/[0.08] hover:border-orange-500/40 p-3 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg cursor-pointer"
                 >
-                  <div className="relative aspect-square rounded-xl bg-black/30 p-3 mb-3 flex items-center justify-center overflow-hidden">
-                    <span className="absolute top-2 left-2 z-10 text-[10px] font-bold text-white bg-rose-600 px-2 py-0.5 rounded-md shadow-sm">
+                  <div className="relative aspect-square rounded-xl bg-black/30 p-2 sm:p-3 mb-2.5 sm:mb-3 flex items-center justify-center overflow-hidden">
+                    <span className="absolute top-2 left-2 z-10 text-[9px] sm:text-[10px] font-bold text-white bg-rose-600 px-1.5 sm:px-2 py-0.5 rounded-md shadow-sm">
                       {deal.discount}
                     </span>
                     <img
@@ -765,44 +765,44 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                     />
                     {/* Hover Quick View Overlay */}
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs pointer-events-none">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 text-white text-xs font-semibold backdrop-blur-md">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-white/20 text-white text-[11px] sm:text-xs font-semibold backdrop-blur-md">
                         <Eye className="w-3.5 h-3.5 text-orange-400" />
                         <span>Quick View</span>
                       </span>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5 sm:space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[11px] text-slate-400">{deal.brand}</span>
-                      <div className="flex items-center gap-1 text-amber-400 font-bold text-xs">
-                        <Star className="w-3.5 h-3.5 fill-current" />
+                      <span className="text-[10px] sm:text-[11px] text-slate-400 truncate max-w-[80px] sm:max-w-none">{deal.brand}</span>
+                      <div className="flex items-center gap-1 text-amber-400 font-bold text-[11px] sm:text-xs">
+                        <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
                         <span>{deal.rating}</span>
                       </div>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white line-clamp-1 font-['Outfit'] group-hover:text-orange-400 transition-colors">
+                    <h4 className="text-xs sm:text-sm font-bold text-white line-clamp-1 font-['Outfit'] group-hover:text-orange-400 transition-colors">
                       {deal.title}
                     </h4>
 
                     {/* Price Row */}
-                    <div className="flex items-baseline gap-2 pt-1">
-                      <span className="text-base font-extrabold text-orange-400 font-mono">
+                    <div className="flex items-baseline gap-1.5 sm:gap-2 pt-0.5">
+                      <span className="text-sm sm:text-base font-extrabold text-orange-400 font-mono">
                         ৳{deal.price.toLocaleString()}
                       </span>
-                      <span className="text-xs text-slate-500 line-through font-mono">
+                      <span className="text-[11px] sm:text-xs text-slate-500 line-through font-mono">
                         ৳{deal.originalPrice.toLocaleString()}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2 pt-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2 pt-1.5">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedProductId(deal.id);
                         }}
-                        className="p-2.5 rounded-xl bg-white/[0.05] hover:bg-orange-500/20 text-slate-300 hover:text-orange-400 border border-white/[0.1] hover:border-orange-500/30 transition cursor-pointer"
+                        className="p-2 sm:p-2.5 rounded-xl bg-white/[0.05] hover:bg-orange-500/20 text-slate-300 hover:text-orange-400 border border-white/[0.1] hover:border-orange-500/30 transition cursor-pointer"
                         title="Quick View Product Details & Closure Price"
                       >
                         <Eye className="w-3.5 h-3.5" />
@@ -826,7 +826,7 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                             });
                           }
                         }}
-                        className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        className={`flex-1 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer ${
                           inCart
                             ? "bg-emerald-600/90 text-white shadow-emerald-950/40"
                             : "bg-white/[0.08] hover:bg-gradient-to-r hover:from-[#df5d2c] hover:to-[#ff7849] text-white hover:shadow-lg"
@@ -840,7 +840,7 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
                         ) : (
                           <>
                             <ShoppingBag className="w-3.5 h-3.5" />
-                            <span>Add to Cart</span>
+                            <span>Add</span>
                           </>
                         )}
                       </button>

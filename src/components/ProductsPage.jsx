@@ -239,11 +239,11 @@ export default function ProductsPage({
 
       {/* Main Content: Loading, Error, or Product Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {[...Array(itemsPerPage)].map((_, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-[#121829] border border-white/[0.06] p-4 space-y-3 animate-pulse"
+              className="rounded-2xl bg-[#121829] border border-white/[0.06] p-3 sm:p-4 space-y-3 animate-pulse"
             >
               <div className="aspect-[4/3] rounded-xl bg-white/[0.04]" />
               <div className="h-4 bg-white/[0.06] rounded w-3/4" />
@@ -253,7 +253,7 @@ export default function ProductsPage({
           ))}
         </div>
       ) : error ? (
-        <div className="rounded-3xl bg-[#151a2c] border border-rose-500/30 p-12 text-center max-w-lg mx-auto space-y-4 shadow-2xl">
+        <div className="rounded-3xl bg-[#151a2c] border border-rose-500/30 p-8 sm:p-12 text-center max-w-lg mx-auto space-y-4 shadow-2xl">
           <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
             <AlertTriangle className="w-7 h-7" />
           </div>
@@ -268,7 +268,7 @@ export default function ProductsPage({
           </button>
         </div>
       ) : products.length === 0 ? (
-        <div className="rounded-3xl bg-[#121829] border border-white/[0.08] p-16 text-center max-w-md mx-auto space-y-4 shadow-xl">
+        <div className="rounded-3xl bg-[#121829] border border-white/[0.08] p-10 sm:p-16 text-center max-w-md mx-auto space-y-4 shadow-xl">
           <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center mx-auto text-slate-400">
             <PackageSearch className="w-8 h-8 text-orange-400" />
           </div>
@@ -285,7 +285,7 @@ export default function ProductsPage({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {products.map((item) => (
             <ProductCard
               key={item.id}

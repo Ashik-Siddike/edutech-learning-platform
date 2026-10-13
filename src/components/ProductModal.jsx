@@ -51,18 +51,18 @@ export default function ProductModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#0e1424] border border-white/[0.12] rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-[#0e1424] border border-white/[0.12] rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs shadow-md border border-white/10"
+          className="absolute top-3 right-3 sm:top-5 sm:right-5 z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs shadow-md border border-white/10"
           aria-label="Close modal"
         >
           <X className="w-4 h-4" />
@@ -70,17 +70,17 @@ export default function ProductModal({
 
         {/* Loading State */}
         {loading && (
-          <div className="py-24 text-center space-y-4">
-            <Loader2 className="w-10 h-10 text-orange-400 animate-spin mx-auto" />
+          <div className="py-20 sm:py-24 text-center space-y-4">
+            <Loader2 className="w-9 h-9 text-orange-400 animate-spin mx-auto" />
             <p className="text-xs text-slate-400">Loading product specifications via DummyJSON API...</p>
           </div>
         )}
 
         {/* Error State */}
         {!loading && error && (
-          <div className="py-16 text-center space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
-              <AlertTriangle className="w-7 h-7" />
+          <div className="py-12 sm:py-16 text-center space-y-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+              <AlertTriangle className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
             <p className="text-xs text-rose-300 max-w-sm mx-auto">{error}</p>
             <button
@@ -95,11 +95,11 @@ export default function ProductModal({
 
         {/* Product Details Content */}
         {!loading && !error && product && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Top Media & Information Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
               {/* Image Showcase */}
-              <div className="bg-[#080c16] rounded-2xl p-4 flex items-center justify-center aspect-square border border-white/[0.06] overflow-hidden">
+              <div className="bg-[#080c16] rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-center aspect-[4/3] sm:aspect-square max-h-56 sm:max-h-none border border-white/[0.06] overflow-hidden">
                 <img
                   src={product.thumbnail || product.images?.[0]}
                   alt={product.title}
