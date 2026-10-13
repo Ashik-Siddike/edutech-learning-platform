@@ -18,16 +18,77 @@ import {
   Heart,
   Tag,
   Zap,
+  Search,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveFromCart }) {
   const [copiedCode, setCopiedCode] = useState(null);
+  const [activeSpotlight, setActiveSpotlight] = useState(0);
+  const [heroSearch, setHeroSearch] = useState("");
 
   const handleCopyCode = (code) => {
     navigator.clipboard?.writeText(code);
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2500);
   };
+
+  const handleHeroSearchSubmit = (e) => {
+    e.preventDefault();
+    if (onNavigate) {
+      onNavigate("products");
+    }
+  };
+
+  const heroSpotlights = [
+    {
+      id: "spotlight-iphone",
+      category: "smartphones",
+      badge: "FLAGSHIP SMARTPHONE",
+      title: "Apple iPhone 15 Pro Max 256GB",
+      tagline: "Aerospace Titanium • A17 Pro 3nm",
+      specs: ["Titanium Chassis", "A17 Pro Chip", "48MP Main Sensor", "Action Button"],
+      priceBDT: 154999,
+      originalPriceBDT: 178000,
+      discount: "13% OFF",
+      rating: 4.9,
+      reviews: "1.2k+ reviews",
+      image: "https://cdn.dummyjson.com/products/images/smartphones/iPhone%205s/thumbnail.png",
+      tag: "Top Flagship",
+    },
+    {
+      id: "spotlight-macbook",
+      category: "laptops",
+      badge: "PRO WORKSTATION",
+      title: "Apple MacBook Pro 16\" M3 Max",
+      tagline: "Liquid Retina XDR • 36GB Unified RAM",
+      specs: ["M3 Max 14-Core", "Liquid Retina XDR", "36GB Memory", "22h Battery"],
+      priceBDT: 349999,
+      originalPriceBDT: 389000,
+      discount: "10% OFF",
+      rating: 5.0,
+      reviews: "850+ reviews",
+      image: "https://cdn.dummyjson.com/products/images/laptops/Apple%20MacBook%20Pro%2014%20Inch%20Space%20Grey/thumbnail.png",
+      tag: "Pro Studio",
+    },
+    {
+      id: "spotlight-sony",
+      category: "electronics",
+      badge: "FLAGSHIP AUDIO",
+      title: "Sony WH-1000XM5 Wireless Noise-Canceling",
+      tagline: "Dual Processors • 30h Long Playtime",
+      specs: ["Auto NC Optimizer", "30h Playtime", "Speak-to-Chat", "Multipoint Connect"],
+      priceBDT: 38500,
+      originalPriceBDT: 45000,
+      discount: "15% OFF",
+      rating: 4.9,
+      reviews: "3.8k+ reviews",
+      image: "https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/thumbnail.png",
+      tag: "Signature Sound",
+    },
+  ];
+
+  const currentSpotlight = heroSpotlights[activeSpotlight];
 
   const shopCategories = [
     {
@@ -138,101 +199,300 @@ export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveF
   return (
     <div className="w-full text-slate-100 overflow-hidden bg-ambient-mesh">
       {/* ========================================================
-          HERO SECTION: 3D Visual Stage + High-Impact Typography
+          HERO SECTION: 3D Holographic Stage + Interactive Spotlight
          ======================================================== */}
-      <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Ambient Radial Mesh Orbs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-orange-500/15 to-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        {/* Ambient Radial Mesh Cyber Aura */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-[#df5d2c]/20 via-[#00f2fe]/15 to-[#a855f7]/10 rounded-full blur-[160px] pointer-events-none -z-10" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column: Headlines & Action Trigger */}
+          
+          {/* Left Column: Interactive Spotlight & Action Triggers */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            {/* Glowing Eyebrow Pill */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500/15 via-orange-500/10 to-transparent border border-orange-500/30 text-orange-400 text-xs font-semibold shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-orange-400 animate-ping" />
-              <span className="font-['Outfit'] tracking-wider uppercase">OFFICIAL STORE BD • 2026 ED</span>
+            
+            {/* Top Interactive Flagship Switcher Pills */}
+            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#12182a]/90 border border-white/[0.1] backdrop-blur-xl shadow-xl mx-auto lg:mx-0">
+              {heroSpotlights.map((item, idx) => {
+                const isSelected = activeSpotlight === idx;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setActiveSpotlight(idx)}
+                    className={`px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                      isSelected
+                        ? "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white shadow-lg shadow-orange-950/50"
+                        : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    <span>{idx === 0 ? "📱 Smartphones" : idx === 1 ? "💻 Pro Laptops" : "🎧 Audio Gear"}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Glowing Architecture Eyebrow */}
+            <div className="flex items-center justify-center lg:justify-start gap-2">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500/15 via-orange-500/10 to-transparent border border-orange-500/30 text-orange-400 text-xs font-semibold shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span className="font-['Outfit'] tracking-wider uppercase">OFFICIAL STORE BD • 2026 ARCHITECTURE</span>
+              </div>
             </div>
 
             {/* Display Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-['Outfit'] tracking-tight leading-[1.08] text-white">
-              Next-Gen Tech &{" "}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-['Outfit'] tracking-tight leading-[1.06] text-white">
+              Where Technology Meets{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
-                Modern Lifestyle
-              </span>{" "}
-              Delivered Faster.
+                Pure Luxury.
+              </span>
             </h1>
 
             {/* Sub-paragraph */}
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Experience the future of online shopping in Bangladesh. Curated authentic gadgets, flagship smartphones, laptops, and luxury essentials backed by official warranty and instant doorstep delivery.
+              Discover Bangladesh&apos;s premier authentic tech &amp; lifestyle destination. 100% genuine Apple, Samsung, and pro gadgets backed by official 1-year brand warranty and rapid doorstep dispatch.
             </p>
 
-            {/* CTAs Group */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <button
-                type="button"
-                onClick={() => onNavigate("products")}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-sm font-bold shadow-xl shadow-orange-950/50 hover:shadow-orange-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2.5 group"
-              >
-                <span>Explore Store Catalog</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+            {/* Hero Quick Search Bar */}
+            <form onSubmit={handleHeroSearchSubmit} className="relative max-w-xl mx-auto lg:mx-0 pt-1">
+              <div className="relative flex items-center">
+                <Search className="absolute left-4 w-4 h-4 text-orange-400 pointer-events-none" />
+                <input
+                  type="text"
+                  value={heroSearch}
+                  onChange={(e) => setHeroSearch(e.target.value)}
+                  placeholder="Search 1,000+ smartphones, laptops, perfumes, gadgets..."
+                  className="w-full pl-11 pr-28 py-3.5 rounded-2xl bg-[#121829]/90 border border-white/[0.12] focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-xs sm:text-sm text-white placeholder-slate-400 outline-none backdrop-blur-xl shadow-2xl transition"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-xs font-bold hover:opacity-95 transition shadow cursor-pointer"
+                >
+                  Search
+                </button>
+              </div>
+
+              {/* Quick Keyword Pills */}
+              <div className="flex items-center gap-2 mt-2.5 overflow-x-auto text-[11px] text-slate-400 scrollbar-none">
+                <span className="shrink-0 text-slate-500 font-semibold font-['Outfit']">Trending:</span>
+                <button
+                  type="button"
+                  onClick={() => onNavigate("products")}
+                  className="hover:text-orange-400 transition cursor-pointer shrink-0 font-medium"
+                >
+                  📱 iPhone 15 Pro
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={() => onNavigate("products")}
+                  className="hover:text-cyan-400 transition cursor-pointer shrink-0 font-medium"
+                >
+                  💻 MacBook M3
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={() => onNavigate("products")}
+                  className="hover:text-pink-400 transition cursor-pointer shrink-0 font-medium"
+                >
+                  ✨ Dior Sauvage
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={() => onNavigate("products")}
+                  className="hover:text-emerald-400 transition cursor-pointer shrink-0 font-mono font-bold text-orange-400"
+                >
+                  🏷️ STORE20 (20% OFF)
+                </button>
+              </div>
+            </form>
+
+            {/* Dynamic Active Spotlight Action Box */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-[#141a2c] to-[#0e1424] border border-white/[0.1] flex flex-col sm:flex-row items-center justify-between gap-4 max-w-xl mx-auto lg:mx-0 shadow-xl relative overflow-hidden">
+              <div className="text-center sm:text-left space-y-1">
+                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                  <span className="text-[10px] font-bold text-orange-400 uppercase tracking-wider font-mono">
+                    SPOTLIGHT: {currentSpotlight.badge}
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.2 rounded border border-emerald-500/20">
+                    {currentSpotlight.discount}
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-white font-['Outfit'] line-clamp-1">
+                  {currentSpotlight.title}
+                </h4>
+                <div className="flex items-baseline gap-2 justify-center sm:justify-start">
+                  <span className="text-lg font-black text-white font-mono">
+                    ৳{currentSpotlight.priceBDT.toLocaleString()}
+                  </span>
+                  <span className="text-xs text-slate-500 line-through font-mono">
+                    ৳{currentSpotlight.originalPriceBDT.toLocaleString()}
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    ({currentSpotlight.reviews})
+                  </span>
+                </div>
+              </div>
 
               <button
                 type="button"
                 onClick={() => {
-                  const el = document.getElementById("flash-deals");
-                  el?.scrollIntoView({ behavior: "smooth" });
+                  onAddToCart({
+                    id: currentSpotlight.id,
+                    title: currentSpotlight.title,
+                    price: currentSpotlight.priceBDT,
+                    originalPrice: currentSpotlight.originalPriceBDT,
+                    image: currentSpotlight.image,
+                    directImage: heroImg,
+                    category: currentSpotlight.category,
+                    brand: "Apple / Flagship",
+                  });
                 }}
-                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#141b2d] hover:bg-[#1a233a] border border-white/10 hover:border-white/20 text-slate-200 text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-2 shadow-md"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg shadow-orange-950/40 hover:scale-105 active:scale-95 transition cursor-pointer shrink-0 flex items-center justify-center gap-1.5"
               >
-                <Flame className="w-4 h-4 text-orange-400" />
-                <span>Today's Flash Deals</span>
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span>{cart.some((c) => c.id === currentSpotlight.id) ? "In Cart ✓" : "Add Spotlight to Cart"}</span>
               </button>
             </div>
 
-            {/* Anti-Boring KPI Metric Pills */}
-            <div className="pt-6 grid grid-cols-3 gap-3 sm:gap-4 max-w-lg mx-auto lg:mx-0">
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center">
-                <span className="block text-lg sm:text-xl font-extrabold text-white font-['Outfit']">100%</span>
-                <span className="text-[11px] text-slate-400 font-medium">Genuine Brand</span>
+            {/* Social Proof & Customer Count Row */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <div className="flex -space-x-2">
+                <img
+                  className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B0F19]"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=120&auto=format&fit=crop"
+                  alt="Customer"
+                />
+                <img
+                  className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B0F19]"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120&auto=format&fit=crop"
+                  alt="Customer"
+                />
+                <img
+                  className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B0F19]"
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=120&auto=format&fit=crop"
+                  alt="Customer"
+                />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-600 text-[10px] font-bold text-white ring-2 ring-[#0B0F19]">
+                  +50k
+                </div>
               </div>
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center">
-                <span className="block text-lg sm:text-xl font-extrabold text-orange-400 font-['Outfit']">24 Hours</span>
-                <span className="text-[11px] text-slate-400 font-medium">Fast Dispatch</span>
-              </div>
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center">
-                <span className="block text-lg sm:text-xl font-extrabold text-cyan-400 font-['Outfit']">4.9 / 5</span>
-                <span className="text-[11px] text-slate-400 font-medium">TrustScore</span>
+
+              <div className="text-xs text-slate-400 text-center sm:text-left leading-tight">
+                <div className="flex items-center gap-1 text-amber-400 justify-center sm:justify-start font-bold">
+                  <span>★★★★★</span>
+                  <span className="text-slate-200 ml-1">4.9 / 5 Rating</span>
+                </div>
+                <span className="text-[11px] text-slate-400 block mt-0.5">
+                  Over 50,000+ satisfied tech buyers across all 64 districts in Bangladesh.
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: 3D Hero Gadget Stage */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            {/* Ambient Lighting Ring */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#df5d2c]/20 via-transparent to-[#00f2fe]/20 rounded-3xl blur-2xl -z-10" />
+          {/* Right Column: 3D Holographic Gadget Stage */}
+          <div className="lg:col-span-5 relative flex items-center justify-center pt-8 lg:pt-0">
+            
+            {/* Concentric Pulsing Light Rings */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+              <div className="w-[340px] sm:w-[420px] h-[340px] sm:h-[420px] rounded-full border border-orange-500/20 animate-ring-pulse" />
+              <div className="absolute w-[440px] sm:w-[520px] h-[440px] sm:h-[520px] rounded-full border border-cyan-500/15 animate-ring-pulse" style={{ animationDelay: "1.5s" }} />
+            </div>
 
+            {/* Levitating Device Stage Container */}
             <div className="relative group w-full max-w-md">
-              <div className="relative rounded-3xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] p-4 sm:p-6 border border-white/[0.12] shadow-2xl backdrop-blur-xl overflow-hidden">
+              
+              {/* Floating Levitating Image */}
+              <div className="relative animate-float-slow transition-transform duration-500">
                 <img
                   src={heroImg}
                   alt="Suffex Store Gadgets"
-                  className="w-full h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-auto object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.9)] filter group-hover:scale-105 transition-transform duration-500"
                 />
 
-                {/* Floating Micro Badge 1 */}
-                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-3 py-1.5 rounded-xl bg-[#0e1424]/90 border border-white/15 backdrop-blur-md shadow-xl flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[11px] font-bold text-white font-['Outfit']">Verified Flagship</span>
-                </div>
+                {/* 3D Holographic Floor Shadow / Pedestal */}
+                <div className="w-3/4 h-8 mx-auto -mt-6 bg-gradient-to-r from-transparent via-[#df5d2c]/40 to-transparent blur-xl rounded-full" />
+              </div>
 
-                {/* Floating Micro Badge 2 */}
-                <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-xl flex items-center gap-2 font-['Outfit'] font-bold text-xs">
-                  <Zap className="w-4 h-4 fill-white" />
-                  <span>Extra 20% Off Code</span>
+              {/* Floating Glassmorphic Micro-HUD 1: Trust Score */}
+              <div className="absolute -top-4 -left-3 sm:-left-6 px-3.5 py-2 rounded-2xl bg-[#0e1424]/90 border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-2.5 animate-float-reverse">
+                <div className="w-7 h-7 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div className="leading-tight">
+                  <span className="text-[11px] font-extrabold text-white font-['Outfit'] block">
+                    100% Genuine BD
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-semibold">
+                    Official 1-Yr Warranty
+                  </span>
                 </div>
               </div>
+
+              {/* Floating Glassmorphic Micro-HUD 2: Flash Voucher */}
+              <div className="absolute top-1/3 -right-3 sm:-right-6 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-2xl flex items-center gap-2.5 animate-float-slow">
+                <Zap className="w-4 h-4 fill-white" />
+                <div className="leading-tight text-left">
+                  <span className="text-[11px] font-black font-['Outfit'] block">
+                    EXTRA 20% OFF
+                  </span>
+                  <span className="text-[10px] text-orange-100 font-mono tracking-wider font-bold">
+                    CODE: STORE20
+                  </span>
+                </div>
+              </div>
+
+              {/* Floating Glassmorphic Micro-HUD 3: Express Delivery Route */}
+              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-2xl bg-[#0e1424]/95 border border-white/20 backdrop-blur-xl shadow-2xl flex items-center gap-3 w-max">
+                <div className="w-7 h-7 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center animate-pulse">
+                  <Truck className="w-4 h-4" />
+                </div>
+                <div className="leading-tight text-left">
+                  <span className="text-[11px] font-bold text-white font-['Outfit'] block">
+                    Express 24h Delivery
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    Dhanmondi Hub ➔ Your Doorstep
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* 4-Item Anti-Boring Trust Ticker Bar at Bottom of Hero */}
+        <div className="mt-14 pt-8 border-t border-white/[0.08] grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+            <ShieldCheck className="w-5 h-5 text-orange-400 shrink-0" />
+            <div className="text-left leading-tight">
+              <span className="text-xs font-bold text-white font-['Outfit'] block">100% Authentic</span>
+              <span className="text-[10px] text-slate-400">Official Brand Importers</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+            <Truck className="w-5 h-5 text-cyan-400 shrink-0" />
+            <div className="text-left leading-tight">
+              <span className="text-xs font-bold text-white font-['Outfit'] block">24-48h Delivery</span>
+              <span className="text-[10px] text-slate-400">Across 64 Districts BD</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+            <RotateCcw className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div className="text-left leading-tight">
+              <span className="text-xs font-bold text-white font-['Outfit'] block">7 Days Return</span>
+              <span className="text-[10px] text-slate-400">Replacement Guarantee</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+            <Zap className="w-5 h-5 text-amber-400 shrink-0" />
+            <div className="text-left leading-tight">
+              <span className="text-xs font-bold text-white font-['Outfit'] block">bKash &amp; COD</span>
+              <span className="text-[10px] text-slate-400">Instant Digital Checkout</span>
             </div>
           </div>
         </div>
