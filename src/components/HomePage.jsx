@@ -1,73 +1,88 @@
-// High-impact E-Commerce Home Page with hero gadgets, categories grid, deals, and trust badges
+import { useState } from "react";
 import heroImg from "../assets/3D hero image.png";
+import {
+  Sparkles,
+  ShoppingBag,
+  ArrowRight,
+  Flame,
+  Truck,
+  ShieldCheck,
+  RotateCcw,
+  Clock,
+  Headphones,
+  Check,
+  Copy,
+  Star,
+  Smartphone,
+  Laptop,
+  Heart,
+  Tag,
+  Zap,
+} from "lucide-react";
 
-export default function HomePage({ onNavigate, onAddToCart }) {
+export default function HomePage({ onNavigate, cart = [], onAddToCart, onRemoveFromCart }) {
+  const [copiedCode, setCopiedCode] = useState(null);
+
+  const handleCopyCode = (code) => {
+    navigator.clipboard?.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2500);
+  };
+
   const shopCategories = [
     {
       id: "smartphones",
       label: "Smartphones",
-      count: "Latest Flagships",
-      icon: (
-        <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-        </svg>
-      ),
-      gradient: "from-orange-950/40 to-amber-950/20",
+      subtitle: "Flagship 5G Devices",
+      count: "Latest Models",
+      icon: <Smartphone className="w-6 h-6 text-orange-400" />,
+      accent: "from-orange-500/20 to-amber-500/10",
+      borderGlow: "group-hover:border-orange-500/40",
     },
     {
       id: "laptops",
       label: "Laptops & PC",
+      subtitle: "M3/M4 & RTX Rigs",
       count: "Pro Tech Gear",
-      icon: (
-        <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      ),
-      gradient: "from-cyan-950/40 to-blue-950/20",
+      icon: <Laptop className="w-6 h-6 text-cyan-400" />,
+      accent: "from-cyan-500/20 to-blue-500/10",
+      borderGlow: "group-hover:border-cyan-500/40",
     },
     {
       id: "fragrances",
       label: "Fragrances",
-      count: "Luxury Perfumes",
-      icon: (
-        <svg className="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-        </svg>
-      ),
-      gradient: "from-pink-950/40 to-rose-950/20",
+      subtitle: "Eau De Parfum",
+      count: "Luxury Scents",
+      icon: <Sparkles className="w-6 h-6 text-pink-400" />,
+      accent: "from-pink-500/20 to-rose-500/10",
+      borderGlow: "group-hover:border-pink-500/40",
     },
     {
       id: "beauty",
       label: "Beauty & Care",
-      count: "Skincare & Cosmetics",
-      icon: (
-        <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        </svg>
-      ),
-      gradient: "from-purple-950/40 to-indigo-950/20",
+      subtitle: "Organic Skincare",
+      count: "Derm-Tested",
+      icon: <Heart className="w-6 h-6 text-purple-400" />,
+      accent: "from-purple-500/20 to-indigo-500/10",
+      borderGlow: "group-hover:border-purple-500/40",
     },
     {
       id: "furniture",
       label: "Modern Furniture",
-      count: "Home & Office",
-      icon: (
-        <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      ),
-      gradient: "from-amber-950/40 to-yellow-950/20",
+      subtitle: "Ergonomic & Living",
+      count: "Interior Designs",
+      icon: <Tag className="w-6 h-6 text-amber-400" />,
+      accent: "from-amber-500/20 to-yellow-500/10",
+      borderGlow: "group-hover:border-amber-500/40",
     },
     {
       id: "groceries",
       label: "Groceries & Fresh",
-      count: "Pantry Essentials",
-      icon: (
-        <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      ),
-      gradient: "from-emerald-950/40 to-teal-950/20",
+      subtitle: "Pantry & Gourmet",
+      count: "Everyday Needs",
+      icon: <ShoppingBag className="w-6 h-6 text-emerald-400" />,
+      accent: "from-emerald-500/20 to-teal-500/10",
+      borderGlow: "group-hover:border-emerald-500/40",
     },
   ];
 
@@ -76,6 +91,7 @@ export default function HomePage({ onNavigate, onAddToCart }) {
       id: "prod-1",
       title: "Essence Mascara Lash Princess",
       category: "beauty",
+      brand: "Essence",
       price: 1199,
       originalPrice: 1599,
       discount: "25% OFF",
@@ -86,6 +102,7 @@ export default function HomePage({ onNavigate, onAddToCart }) {
       id: "prod-2",
       title: "Eyeshadow Palette with Mirror",
       category: "beauty",
+      brand: "Glamour",
       price: 2399,
       originalPrice: 2999,
       discount: "20% OFF",
@@ -95,7 +112,8 @@ export default function HomePage({ onNavigate, onAddToCart }) {
     {
       id: "prod-3",
       title: "Powder Canister Fragrance",
-      category: "beauty",
+      category: "fragrances",
+      brand: "Aroma Luxury",
       price: 1799,
       originalPrice: 2200,
       discount: "18% OFF",
@@ -104,131 +122,167 @@ export default function HomePage({ onNavigate, onAddToCart }) {
     },
     {
       id: "prod-4",
-      title: "Red Lipstick Matte Velvet",
+      title: "Red Lipstick Long Wear Matte",
       category: "beauty",
-      price: 1550,
-      originalPrice: 1999,
-      discount: "22% OFF",
-      rating: 4.6,
+      brand: "Chic Glow",
+      price: 1499,
+      originalPrice: 1899,
+      discount: "21% OFF",
+      rating: 4.9,
       image: "https://cdn.dummyjson.com/products/images/beauty/Red%20Lipstick/thumbnail.png",
     },
   ];
 
+  const isItemInCart = (id) => cart.some((c) => c.id === id);
+
   return (
-    <div className="space-y-16 pb-16 font-sans">
-      {/* 1. Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Heading, Slogan & Actions */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-950/60 border border-orange-700/50 text-orange-400 text-xs font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span>Next-Gen E-Commerce Experience</span>
-              </div>
+    <div className="w-full text-slate-100 overflow-hidden bg-ambient-mesh">
+      {/* ========================================================
+          HERO SECTION: 3D Visual Stage + High-Impact Typography
+         ======================================================== */}
+      <section className="relative pt-12 pb-20 md:pt-20 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        {/* Ambient Radial Mesh Orbs */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-orange-500/15 to-cyan-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-black text-white tracking-tight leading-tight sm:leading-none">
-                Upgrade Your Life With{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#f77e48] to-[#f99e74]">
-                  Premium Gadgets
-                </span>{" "}
-                &amp; Daily Essentials.
-              </h1>
-
-              <p className="text-gray-300 text-xs sm:text-sm sm:leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Shop genuine tech, smartphones, laptops, fragrances, and lifestyle products with instant bKash/Nagad checkout, 100% authenticity guarantee, and nationwide delivery.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => onNavigate("products")}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#b0401d] via-[#c44c25] to-[#df5d2c] text-white font-semibold text-xs sm:text-sm shadow-xl shadow-orange-950/60 hover:opacity-95 transition active:scale-95 cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <span>Explore All Products</span>
-                  <span>→</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate("orders")}
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-200 border border-gray-700 text-xs sm:text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                  <span>Track My Orders</span>
-                </button>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-4 grid grid-cols-3 gap-3 border-t border-gray-800/80 text-left">
-                <div>
-                  <span className="text-xl sm:text-2xl font-bold font-mono text-white block">10,000+</span>
-                  <span className="text-[11px] text-gray-400">Authentic Items</span>
-                </div>
-                <div>
-                  <span className="text-xl sm:text-2xl font-bold font-mono text-orange-400 block">4.9 ★</span>
-                  <span className="text-[11px] text-gray-400">Customer Rating</span>
-                </div>
-                <div>
-                  <span className="text-xl sm:text-2xl font-bold font-mono text-emerald-400 block">2-3 Days</span>
-                  <span className="text-[11px] text-gray-400">Fast Nationwide BD</span>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Headlines & Action Trigger */}
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            {/* Glowing Eyebrow Pill */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-500/15 via-orange-500/10 to-transparent border border-orange-500/30 text-orange-400 text-xs font-semibold shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-orange-400 animate-ping" />
+              <span className="font-['Outfit'] tracking-wider uppercase">OFFICIAL STORE BD • 2026 ED</span>
             </div>
 
-            {/* Right Column: Hero Visual Showcase */}
-            <div className="lg:col-span-5 relative flex items-center justify-center">
-              <div className="relative w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-[#191b24] to-[#212430] border border-gray-800 p-4 shadow-2xl flex items-center justify-center overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent pointer-events-none" />
+            {/* Display Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-['Outfit'] tracking-tight leading-[1.08] text-white">
+              Next-Gen Tech &{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
+                Modern Lifestyle
+              </span>{" "}
+              Delivered Faster.
+            </h1>
+
+            {/* Sub-paragraph */}
+            <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+              Experience the future of online shopping in Bangladesh. Curated authentic gadgets, flagship smartphones, laptops, and luxury essentials backed by official warranty and instant doorstep delivery.
+            </p>
+
+            {/* CTAs Group */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <button
+                type="button"
+                onClick={() => onNavigate("products")}
+                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-sm font-bold shadow-xl shadow-orange-950/50 hover:shadow-orange-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2.5 group"
+              >
+                <span>Explore Store Catalog</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("flash-deals");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#141b2d] hover:bg-[#1a233a] border border-white/10 hover:border-white/20 text-slate-200 text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-2 shadow-md"
+              >
+                <Flame className="w-4 h-4 text-orange-400" />
+                <span>Today's Flash Deals</span>
+              </button>
+            </div>
+
+            {/* Anti-Boring KPI Metric Pills */}
+            <div className="pt-6 grid grid-cols-3 gap-3 sm:gap-4 max-w-lg mx-auto lg:mx-0">
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center">
+                <span className="block text-lg sm:text-xl font-extrabold text-white font-['Outfit']">100%</span>
+                <span className="text-[11px] text-slate-400 font-medium">Genuine Brand</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center">
+                <span className="block text-lg sm:text-xl font-extrabold text-orange-400 font-['Outfit']">24 Hours</span>
+                <span className="text-[11px] text-slate-400 font-medium">Fast Dispatch</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-center">
+                <span className="block text-lg sm:text-xl font-extrabold text-cyan-400 font-['Outfit']">4.9 / 5</span>
+                <span className="text-[11px] text-slate-400 font-medium">TrustScore</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: 3D Hero Gadget Stage */}
+          <div className="lg:col-span-5 relative flex items-center justify-center">
+            {/* Ambient Lighting Ring */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#df5d2c]/20 via-transparent to-[#00f2fe]/20 rounded-3xl blur-2xl -z-10" />
+
+            <div className="relative group w-full max-w-md">
+              <div className="relative rounded-3xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] p-4 sm:p-6 border border-white/[0.12] shadow-2xl backdrop-blur-xl overflow-hidden">
                 <img
                   src={heroImg}
-                  alt="Suffex E-Commerce Store Hero"
-                  className="w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-105 transition duration-700"
+                  alt="Suffex Store Gadgets"
+                  className="w-full h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-500"
                 />
+
+                {/* Floating Micro Badge 1 */}
+                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-3 py-1.5 rounded-xl bg-[#0e1424]/90 border border-white/15 backdrop-blur-md shadow-xl flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[11px] font-bold text-white font-['Outfit']">Verified Flagship</span>
+                </div>
+
+                {/* Floating Micro Badge 2 */}
+                <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-xl flex items-center gap-2 font-['Outfit'] font-bold text-xs">
+                  <Zap className="w-4 h-4 fill-white" />
+                  <span>Extra 20% Off Code</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Top Categories Showcase */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
+      {/* ========================================================
+          CURATED CATEGORIES: Interactive Glass Grid
+         ======================================================== */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.06]">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
-            <span className="text-xs text-orange-400 uppercase tracking-widest font-semibold block">
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-400 mb-2 uppercase tracking-wider font-['Outfit']">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Explore Departments</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-['Outfit'] tracking-tight">
               Curated Collections
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-black text-white mt-1">
-              Popular Product Categories
             </h2>
           </div>
+
           <button
             type="button"
             onClick={() => onNavigate("products")}
-            className="text-xs text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1 cursor-pointer transition"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-orange-400 transition cursor-pointer"
           >
             <span>View All Categories</span>
-            <span>→</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* 6 Category Tiles */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {shopCategories.map((cat) => (
             <div
               key={cat.id}
               onClick={() => onNavigate("products")}
-              className={`p-4 rounded-2xl bg-gradient-to-b ${cat.gradient} bg-[#191b24] border border-gray-800 hover:border-gray-700 transition cursor-pointer text-center group flex flex-col items-center justify-center space-y-2.5 shadow-md hover:scale-[1.02]`}
+              className={`group relative rounded-2xl p-4 sm:p-5 bg-gradient-to-b from-[#13192c] to-[#0d1222] border border-white/[0.08] ${cat.borderGlow} hover:-translate-y-1.5 transition-all duration-300 cursor-pointer shadow-lg flex flex-col justify-between`}
             >
-              <div className="w-12 h-12 rounded-xl bg-[#212430] border border-gray-700 flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner">
+              <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 {cat.icon}
               </div>
+
               <div>
-                <h3 className="font-semibold text-xs sm:text-sm text-white group-hover:text-orange-400 transition">
+                <h3 className="text-sm font-bold text-white font-['Outfit'] group-hover:text-orange-400 transition-colors">
                   {cat.label}
                 </h3>
-                <span className="text-[10px] text-gray-400 block mt-0.5">
+                <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                  {cat.subtitle}
+                </p>
+                <span className="inline-block mt-3 text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-white/[0.05] text-slate-300">
                   {cat.count}
                 </span>
               </div>
@@ -237,171 +291,336 @@ export default function HomePage({ onNavigate, onAddToCart }) {
         </div>
       </section>
 
-      {/* 3. Flash Deals & Trending Items */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="bg-[#191b24] rounded-3xl border border-gray-800 p-6 sm:p-8 space-y-6 shadow-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-800">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-950/70 text-rose-300 border border-rose-800">
-                  🔥 Flash Deals
-                </span>
-                <span className="text-xs text-gray-400 font-mono">Limited Quantities</span>
+      {/* ========================================================
+          FLASH DEALS SHOWCASE: Real-Time Discounts
+         ======================================================== */}
+      <section id="flash-deals" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.06]">
+        <div className="rounded-3xl bg-gradient-to-b from-[#151c30] to-[#0e1324] border border-white/[0.1] p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          {/* Header & Live Countdown Badge */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold">
+                <Flame className="w-3.5 h-3.5 text-rose-400 animate-bounce" />
+                <span>HOT FLASH SALE</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-serif font-bold text-white mt-1">
-                Trending Deals of the Week
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-['Outfit'] tracking-tight">
+                Limited-Time Flagship Deals
               </h2>
             </div>
 
-            <button
-              type="button"
-              onClick={() => onNavigate("products")}
-              className="px-4 py-2 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-200 border border-gray-700 text-xs font-semibold cursor-pointer transition"
-            >
-              See All Deals →
-            </button>
+            {/* Mock Countdown Clock */}
+            <div className="inline-flex items-center gap-2.5 bg-black/40 px-4 py-2 rounded-2xl border border-white/10 text-xs font-mono">
+              <Clock className="w-4 h-4 text-orange-400 shrink-0" />
+              <span className="text-slate-400">Ends in:</span>
+              <span className="text-white font-bold tracking-wider">08h : 42m : 15s</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {featuredDeals.map((item) => (
-              <div
-                key={item.id}
-                className="bg-[#212430]/80 rounded-2xl border border-gray-800/80 p-4 space-y-3 flex flex-col justify-between hover:border-gray-700 transition shadow"
-              >
-                <div>
-                  <div className="relative aspect-square rounded-xl bg-[#14161f] p-3 flex items-center justify-center overflow-hidden border border-gray-800 mb-3">
-                    <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-rose-950/80 border border-rose-800 text-rose-300 text-[10px] font-mono font-bold">
-                      {item.discount}
+          {/* Deal Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {featuredDeals.map((deal) => {
+              const inCart = isItemInCart(deal.id);
+              return (
+                <div
+                  key={deal.id}
+                  className="group bg-[#0e1424]/90 rounded-2xl border border-white/[0.08] hover:border-orange-500/40 p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                >
+                  <div className="relative aspect-square rounded-xl bg-black/30 p-3 mb-3 flex items-center justify-center overflow-hidden">
+                    <span className="absolute top-2 left-2 z-10 text-[10px] font-bold text-white bg-rose-600 px-2 py-0.5 rounded-md shadow-sm">
+                      {deal.discount}
                     </span>
                     <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-contain"
+                      src={deal.image}
+                      alt={deal.title}
+                      className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
 
-                  <span className="text-[10px] font-semibold text-orange-400 uppercase tracking-wide">
-                    {item.category}
-                  </span>
-                  <h4 className="font-semibold text-xs sm:text-sm text-white line-clamp-1 mt-0.5">
-                    {item.title}
-                  </h4>
-                  <div className="flex items-center gap-1 text-[11px] text-amber-400 mt-1">
-                    <span>★ {item.rating}</span>
-                    <span className="text-gray-500">• Verified</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[11px] text-slate-400">{deal.brand}</span>
+                      <div className="flex items-center gap-1 text-amber-400 font-bold text-xs">
+                        <Star className="w-3.5 h-3.5 fill-current" />
+                        <span>{deal.rating}</span>
+                      </div>
+                    </div>
+
+                    <h4 className="text-sm font-bold text-white line-clamp-1 font-['Outfit']">
+                      {deal.title}
+                    </h4>
+
+                    {/* Price Row */}
+                    <div className="flex items-baseline gap-2 pt-1">
+                      <span className="text-base font-extrabold text-orange-400 font-mono">
+                        ৳{deal.price.toLocaleString()}
+                      </span>
+                      <span className="text-xs text-slate-500 line-through font-mono">
+                        ৳{deal.originalPrice.toLocaleString()}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (inCart) {
+                          onRemoveFromCart(deal.id);
+                        } else {
+                          onAddToCart({
+                            id: deal.id,
+                            title: deal.title,
+                            price: deal.price,
+                            originalPrice: deal.originalPrice,
+                            image: deal.image,
+                            category: deal.category,
+                            brand: deal.brand,
+                          });
+                        }
+                      }}
+                      className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-2 ${
+                        inCart
+                          ? "bg-emerald-600/90 text-white shadow-emerald-950/40"
+                          : "bg-white/[0.08] hover:bg-gradient-to-r hover:from-[#df5d2c] hover:to-[#ff7849] text-white hover:shadow-lg"
+                      }`}
+                    >
+                      {inCart ? (
+                        <>
+                          <Check className="w-3.5 h-3.5" />
+                          <span>In Cart</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBag className="w-3.5 h-3.5" />
+                          <span>Add to Cart</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-                <div className="pt-2 border-t border-gray-800/80 flex items-center justify-between">
-                  <div>
-                    <span className="text-sm font-bold font-mono text-white block">
-                      ৳{item.price.toLocaleString()}
-                    </span>
-                    <span className="text-[10px] text-gray-500 line-through font-mono">
-                      ৳{item.originalPrice.toLocaleString()}
-                    </span>
-                  </div>
+      {/* ========================================================
+          PROMO COUPON CARDS: Copy with One Click
+         ======================================================== */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.06]">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold mb-2">
+            <Tag className="w-3.5 h-3.5" />
+            <span>SAVE MORE WITH COUPONS</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-['Outfit'] tracking-tight">
+            Exclusive Shopper Promo Codes
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-2">
+            Click any voucher code below to instantly copy it and apply at checkout for maximum discount!
+          </p>
+        </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onAddToCart) {
-                        onAddToCart({
-                          id: item.id,
-                          title: item.title,
-                          price: item.price,
-                          originalPrice: item.originalPrice,
-                          image: item.image,
-                          category: item.category,
-                        });
-                      }
-                    }}
-                    className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#b0401d] to-[#df5d2c] hover:opacity-95 text-white text-xs font-semibold cursor-pointer transition shadow"
-                  >
-                    Add
-                  </button>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {/* Coupon 1: STORE20 */}
+          <div className="relative rounded-2xl bg-[#141a2c] border border-orange-500/30 p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/15 px-2 py-0.5 rounded-md border border-orange-500/30">
+                  Most Popular
+                </span>
+                <h3 className="text-2xl font-black text-white font-['Outfit'] mt-2">20% DISCOUNT</h3>
+                <p className="text-xs text-slate-300 mt-1">On all tech gadgets & lifestyle products (Up to ৳2,000).</p>
               </div>
-            ))}
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-dashed border-white/15 flex items-center justify-between">
+              <span className="font-mono font-bold text-orange-400 text-sm tracking-wider">STORE20</span>
+              <button
+                type="button"
+                onClick={() => handleCopyCode("STORE20")}
+                className="px-3 py-1.5 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 text-orange-300 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5"
+              >
+                {copiedCode === "STORE20" ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Coupon 2: SUFFEX500 */}
+          <div className="relative rounded-2xl bg-[#141a2c] border border-cyan-500/30 p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-500/15 px-2 py-0.5 rounded-md border border-cyan-500/30">
+                  Flat Bonus
+                </span>
+                <h3 className="text-2xl font-black text-white font-['Outfit'] mt-2">৳500 CASH OFF</h3>
+                <p className="text-xs text-slate-300 mt-1">Instant ৳500 flat off on any order of ৳2,500 or more.</p>
+              </div>
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-dashed border-white/15 flex items-center justify-between">
+              <span className="font-mono font-bold text-cyan-400 text-sm tracking-wider">SUFFEX500</span>
+              <button
+                type="button"
+                onClick={() => handleCopyCode("SUFFEX500")}
+                className="px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5"
+              >
+                {copiedCode === "SUFFEX500" ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Coupon 3: TECH15 */}
+          <div className="relative rounded-2xl bg-[#141a2c] border border-purple-500/30 p-5 shadow-xl flex flex-col justify-between">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400 bg-purple-500/15 px-2 py-0.5 rounded-md border border-purple-500/30">
+                  Electronics
+                </span>
+                <h3 className="text-2xl font-black text-white font-['Outfit'] mt-2">15% SAVINGS</h3>
+                <p className="text-xs text-slate-300 mt-1">Save 15% on Laptops, Smartphones, and Tech Accessories.</p>
+              </div>
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-dashed border-white/15 flex items-center justify-between">
+              <span className="font-mono font-bold text-purple-400 text-sm tracking-wider">TECH15</span>
+              <button
+                type="button"
+                onClick={() => handleCopyCode("TECH15")}
+                className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold transition cursor-pointer flex items-center gap-1.5"
+              >
+                {copiedCode === "TECH15" ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 4. Promo Coupons Showcase Banner */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="rounded-3xl bg-gradient-to-r from-orange-950/40 via-[#212430] to-orange-950/30 border border-orange-800/40 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
-          <div className="space-y-1.5 text-center md:text-left">
-            <span className="text-xs text-orange-400 font-mono font-bold uppercase">
-              Exclusive Shopper Promos
-            </span>
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-white">
-              Save Up To ৳2,000 On Your Order Today!
-            </h3>
-            <p className="text-xs text-gray-300 max-w-md">
-              Use code <strong className="text-orange-400 font-mono">STORE20</strong> for 20% off or <strong className="text-orange-400 font-mono">SUFFEX500</strong> for flat ৳500 off on checkout!
+      {/* ========================================================
+          ANTI-BORING FEATURE PILL GRID: Trust Guarantees
+         ======================================================== */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-white/[0.06]">
+        <div className="text-center max-w-xl mx-auto mb-10">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-['Outfit'] tracking-tight">
+            Why Hundreds of Thousands Choose Suffex
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
+            Designed to guarantee 100% peace of mind on every transaction.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] hover:border-orange-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-['Outfit']">100% Authentic Products</h4>
+              <p className="text-xs text-slate-400">Directly imported from official manufacturer channels.</p>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] hover:border-cyan-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+              <Truck className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-['Outfit']">Express 24-48h Delivery</h4>
+              <p className="text-xs text-slate-400">Superfast doorstep courier across 64 districts in Bangladesh.</p>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+              <RotateCcw className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-['Outfit']">7 Days Easy Return</h4>
+              <p className="text-xs text-slate-400">Hassle-free replacement policy if you receive a damaged unit.</p>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] hover:border-purple-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+              <Headphones className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-['Outfit']">24/7 VIP Customer Support</h4>
+              <p className="text-xs text-slate-400">Live chat, WhatsApp, and dedicated hotline assistance.</p>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] hover:border-amber-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+              <Tag className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-['Outfit']">Best Price Guarantee</h4>
+              <p className="text-xs text-slate-400">Direct pricing with exclusive store vouchers & instant discounts.</p>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3.5 p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] hover:border-rose-500/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center shrink-0">
+              <Zap className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white font-['Outfit']">Cash on Delivery & bKash</h4>
+              <p className="text-xs text-slate-400">Multiple secure payment gateways with instant digital receipts.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          BOTTOM CTA BANNER
+         ======================================================== */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="relative rounded-3xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff8c42] p-8 sm:p-14 shadow-2xl overflow-hidden text-center sm:text-left">
+          <div className="relative z-10 max-w-2xl space-y-4">
+            <h2 className="text-3xl sm:text-4xl font-black text-white font-['Outfit'] tracking-tight">
+              Ready to Upgrade Your Tech & Lifestyle?
+            </h2>
+            <p className="text-sm text-orange-100 leading-relaxed font-normal">
+              Browse our vast inventory of genuine products, take advantage of seasonal discount coupons, and enjoy fast doorstep delivery.
             </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => onNavigate("products")}
-              className="px-6 py-3 rounded-2xl bg-[#df5d2c] hover:bg-orange-600 text-white text-xs sm:text-sm font-semibold transition cursor-pointer shadow-lg active:scale-95"
-            >
-              Shop &amp; Apply Coupon →
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Trust Badges & Guarantee */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-2xl bg-[#191b24] border border-gray-800 flex items-start gap-3.5 shadow-md">
-            <div className="w-10 h-10 rounded-xl bg-orange-950/60 text-orange-400 border border-orange-800/40 flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-              </svg>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase">Free Express Shipping</h4>
-              <p className="text-[11px] text-gray-400 mt-0.5">On all orders over ৳2,000 nationwide.</p>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-[#191b24] border border-gray-800 flex items-start gap-3.5 shadow-md">
-            <div className="w-10 h-10 rounded-xl bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase">100% Genuine Items</h4>
-              <p className="text-[11px] text-gray-400 mt-0.5">Authentic products directly from verified brands.</p>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-[#191b24] border border-gray-800 flex items-start gap-3.5 shadow-md">
-            <div className="w-10 h-10 rounded-xl bg-blue-950/60 text-blue-400 border border-blue-800/40 flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase">7-Day Easy Return</h4>
-              <p className="text-[11px] text-gray-400 mt-0.5">Hassle-free money-back guarantee if unsatisfied.</p>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-[#191b24] border border-gray-800 flex items-start gap-3.5 shadow-md">
-            <div className="w-10 h-10 rounded-xl bg-purple-950/60 text-purple-400 border border-purple-800/40 flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white uppercase">bKash &amp; Nagad Pay</h4>
-              <p className="text-[11px] text-gray-400 mt-0.5">Safe mobile banking, cards &amp; cash on delivery.</p>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => onNavigate("products")}
+                className="px-8 py-3.5 rounded-2xl bg-slate-950 text-white hover:bg-slate-900 text-sm font-bold shadow-xl transition-transform hover:scale-105 active:scale-95 cursor-pointer inline-flex items-center gap-2"
+              >
+                <span>Start Shopping Now</span>
+                <ArrowRight className="w-4 h-4 text-orange-400" />
+              </button>
             </div>
           </div>
         </div>

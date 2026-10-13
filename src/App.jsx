@@ -110,14 +110,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#12131a] text-white flex flex-col font-sans relative">
+    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-sans relative selection:bg-[#df5d2c]/30 selection:text-orange-200">
       {/* Toast notification banner */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 border border-orange-400/40 text-xs font-semibold animate-bounce max-w-sm">
-          <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-          </svg>
-          <span>{toastMessage}</span>
+        <div className="fixed bottom-6 right-6 z-50 bg-[#161d30]/95 backdrop-blur-xl text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-orange-500/40 text-xs font-semibold animate-bounce max-w-sm">
+          <div className="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
+            ✓
+          </div>
+          <span className="leading-snug">{toastMessage}</span>
         </div>
       )}
 

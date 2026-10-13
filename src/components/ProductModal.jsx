@@ -1,9 +1,20 @@
-// ProductModal component: Displays detailed product information in a modal dialog
-// Fetches live data dynamically using useProduct hook
-// Calculates dynamic pricing using a JavaScript Closure function
 import { useState, useEffect, useMemo } from "react";
 import { useProduct } from "../hooks/useProduct";
 import { createPriceCalculator } from "../helpers/priceCalculator";
+import {
+  X,
+  Plus,
+  Minus,
+  ShoppingCart,
+  Check,
+  Star,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  Sparkles,
+  AlertTriangle,
+  Loader2,
+} from "lucide-react";
 
 export default function ProductModal({
   productId,
@@ -12,21 +23,17 @@ export default function ProductModal({
   onAddToCart,
   onRemoveFromCart,
 }) {
-  // Dynamically fetch product details using the hook
   const { product, loading, error, refetch } = useProduct(productId);
-
-  // Interactive quantity state
   const [quantity, setQuantity] = useState(1);
 
-  // Reset quantity when modal opens for a new product
   useEffect(() => {
     setQuantity(1);
   }, [productId]);
 
   /**
-   * Instantiate the price calculator function using a JavaScript Closure.
-   * The outer function `createPriceCalculator` captures config variables (vatRate: 0.05, exchangeRate: 120)
-   * in its lexical scope. The returned inner function calculates the price on demand.
+   * Price calculator function using a JavaScript Closure.
+   * `createPriceCalculator` captures config variables (vatRate: 0.05, exchangeRate: 120)
+   * in its lexical scope.
    */
   const calculatePriceWithClosure = useMemo(() => {
     return createPriceCalculator({
@@ -36,7 +43,6 @@ export default function ProductModal({
     });
   }, []);
 
-  // Compute live pricing via the closure
   const pricing = useMemo(() => {
     return calculatePriceWithClosure(product, quantity);
   }, [calculatePriceWithClosure, product, quantity]);
@@ -45,44 +51,42 @@ export default function ProductModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#191b24] border border-gray-800 rounded-3xl p-6 sm:p-7 shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-[#0e1424] border border-white/[0.12] rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs shadow-md border border-gray-700"
+          className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs shadow-md border border-white/10"
           aria-label="Close modal"
         >
-          ✕
+          <X className="w-4 h-4" />
         </button>
 
         {/* Loading State */}
         {loading && (
-          <div className="py-20 text-center space-y-3">
-            <div className="w-9 h-9 border-3 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-gray-400">Loading live product details from DummyJSON...</p>
+          <div className="py-24 text-center space-y-4">
+            <Loader2 className="w-10 h-10 text-orange-400 animate-spin mx-auto" />
+            <p className="text-xs text-slate-400">Loading product specifications via DummyJSON API...</p>
           </div>
         )}
 
         {/* Error State */}
         {!loading && error && (
           <div className="py-16 text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-rose-950/60 border border-rose-800 text-rose-400 flex items-center justify-center mx-auto">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+            <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+              <AlertTriangle className="w-7 h-7" />
             </div>
             <p className="text-xs text-rose-300 max-w-sm mx-auto">{error}</p>
             <button
               type="button"
               onClick={refetch}
-              className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer transition"
+              className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer transition shadow-lg"
             >
               Retry
             </button>
@@ -92,14 +96,14 @@ export default function ProductModal({
         {/* Product Details Content */}
         {!loading && !error && product && (
           <div className="space-y-6">
-            {/* Top Media & Information */}
+            {/* Top Media & Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-              {/* Image showcase */}
-              <div className="bg-[#14161f] rounded-2xl p-4 flex items-center justify-center aspect-square border border-gray-800">
+              {/* Image Showcase */}
+              <div className="bg-[#080c16] rounded-2xl p-4 flex items-center justify-center aspect-square border border-white/[0.06] overflow-hidden">
                 <img
                   src={product.thumbnail || product.images?.[0]}
                   alt={product.title}
-                  className="max-h-full max-w-full object-contain"
+                  className="max-h-full max-w-full object-contain hover:scale-105 transition-transform duration-300"
                 />
               </div>
 
@@ -107,90 +111,93 @@ export default function ProductModal({
               <div className="space-y-3 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-orange-400 bg-orange-950/60 px-2 py-0.5 rounded border border-orange-800/40">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/15 px-2 py-0.5 rounded-md border border-orange-500/30">
                       {product.category}
                     </span>
-                    <span className="text-[11px] text-gray-400">
-                      Brand: <span className="text-white font-medium">{product.brand || "Authentic"}</span>
+                    <span className="text-[11px] text-slate-400">
+                      Brand: <strong className="text-white">{product.brand || "Official Store"}</strong>
                     </span>
                   </div>
 
-                  <h2 className="text-lg sm:text-xl font-bold font-serif text-white mt-2 leading-tight">
+                  <h2 className="text-lg sm:text-xl font-extrabold text-white font-['Outfit'] mt-2 leading-tight">
                     {product.title}
                   </h2>
 
-                  <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-400">
+                  <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400">
                     <span className="font-mono text-[11px]">SKU: {product.sku || "N/A"}</span>
                     <span>•</span>
-                    <span className="text-amber-400 font-semibold flex items-center gap-1">
-                      ★ {product.rating?.toFixed(1) || "4.5"}
-                    </span>
+                    <div className="flex items-center gap-1 text-amber-400 font-bold">
+                      <Star className="w-3.5 h-3.5 fill-current" />
+                      <span>{product.rating?.toFixed(1) || "4.5"}</span>
+                    </div>
                   </div>
 
                   {/* Price & Discount */}
                   <div className="flex items-baseline gap-2.5 mt-3">
-                    <span className="text-2xl font-bold font-mono text-white">
+                    <span className="text-2xl font-black font-mono text-white">
                       ${product.price?.toFixed(2)}
                     </span>
                     {product.discountPercentage > 0 && (
                       <>
-                        <span className="text-xs text-gray-500 line-through font-mono">
+                        <span className="text-xs text-slate-500 line-through font-mono">
                           ${(product.price / (1 - product.discountPercentage / 100)).toFixed(2)}
                         </span>
-                        <span className="text-xs font-bold text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded">
+                        <span className="text-xs font-bold text-rose-400 bg-rose-500/20 px-2 py-0.5 rounded-md">
                           -{Math.round(product.discountPercentage)}% OFF
                         </span>
                       </>
                     )}
                   </div>
 
-                  <p className="text-xs text-gray-300 mt-3 leading-relaxed">
+                  <p className="text-xs text-slate-300 mt-3 leading-relaxed">
                     {product.description}
                   </p>
                 </div>
 
                 {/* Interactive Quantity Selector & Closure Price Breakdown */}
-                <div className="p-3.5 rounded-2xl bg-[#14161f] border border-gray-800 space-y-2.5 mt-2">
+                <div className="p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] space-y-3 mt-2 shadow-inner">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-300 font-semibold">Quantity</span>
-                    <div className="flex items-center gap-2 bg-[#212430] rounded-xl border border-gray-700 p-1">
+                    <span className="text-xs text-slate-300 font-semibold font-['Outfit']">Quantity Selection</span>
+                    <div className="flex items-center gap-2 bg-[#0a0f1d] rounded-xl border border-white/10 p-1">
                       <button
                         type="button"
                         onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                         disabled={quantity <= 1}
-                        className="w-6 h-6 rounded-lg bg-gray-800 hover:bg-gray-700 disabled:opacity-30 text-white flex items-center justify-center text-xs font-bold transition cursor-pointer"
+                        className="w-6 h-6 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] disabled:opacity-30 text-white flex items-center justify-center transition cursor-pointer"
+                        aria-label="Decrease quantity"
                       >
-                        -
+                        <Minus className="w-3 h-3" />
                       </button>
-                      <span className="w-6 text-center text-xs font-mono font-bold text-white">
+                      <span className="w-7 text-center text-xs font-mono font-bold text-white">
                         {quantity}
                       </span>
                       <button
                         type="button"
                         onClick={() => setQuantity((q) => q + 1)}
-                        className="w-6 h-6 rounded-lg bg-gray-800 hover:bg-gray-700 text-white flex items-center justify-center text-xs font-bold transition cursor-pointer"
+                        className="w-6 h-6 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-white flex items-center justify-center transition cursor-pointer"
+                        aria-label="Increase quantity"
                       >
-                        +
+                        <Plus className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
 
                   {/* Closure Calculated Breakdown */}
-                  <div className="space-y-1 pt-2 border-t border-gray-800 text-[11px] text-gray-400">
+                  <div className="space-y-1.5 pt-2.5 border-t border-white/[0.08] text-[11px] text-slate-400">
                     <div className="flex justify-between items-center text-[10px]">
-                      <span className="px-1.5 py-0.5 rounded bg-orange-950/60 text-orange-400 border border-orange-800/40 font-mono">
-                        ⚡ Closure Calculated
+                      <span className="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-400 border border-orange-500/30 font-mono font-semibold">
+                        ⚡ JS Closure Engine
                       </span>
-                      <span>VAT (5%): ${pricing.vatAmountUSD}</span>
+                      <span>5% VAT: ${pricing.vatAmountUSD}</span>
                     </div>
 
                     <div className="flex justify-between items-baseline pt-1">
-                      <span className="text-gray-300">Total ({quantity} {quantity === 1 ? "unit" : "units"}):</span>
+                      <span className="text-slate-300 font-medium">Grand Total ({quantity} {quantity === 1 ? "unit" : "units"}):</span>
                       <div className="text-right">
-                        <span className="font-mono text-sm font-bold text-orange-400">
+                        <span className="font-mono text-base font-extrabold text-orange-400">
                           ৳{pricing.totalBDT.toLocaleString()}
                         </span>
-                        <span className="font-mono text-[10px] text-gray-400 block">
+                        <span className="font-mono text-[10px] text-slate-400 block">
                           (${pricing.totalUSD.toFixed(2)} USD)
                         </span>
                       </div>
@@ -199,7 +206,7 @@ export default function ProductModal({
                 </div>
 
                 {/* Cart Action Button */}
-                <div className="pt-3 border-t border-gray-800 flex items-center gap-3">
+                <div className="pt-3 border-t border-white/[0.08] flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => {
@@ -219,29 +226,25 @@ export default function ProductModal({
                             image: product.thumbnail,
                             directImage: product.thumbnail,
                             category: product.category,
-                            brand: product.brand || "Official",
+                            brand: product.brand || "Official Store",
                           });
                         }
                       }
                     }}
-                    className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer shadow ${
+                    className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-lg active:scale-98 ${
                       isInCart
                         ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                        : "bg-gradient-to-r from-[#b0401d] to-[#df5d2c] hover:opacity-95 text-white"
+                        : "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white hover:opacity-95"
                     }`}
                   >
                     {isInCart ? (
                       <>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                        </svg>
+                        <Check className="w-4 h-4 text-white" />
                         <span>In Your Cart (Click to Remove)</span>
                       </>
                     ) : (
                       <>
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                        </svg>
+                        <ShoppingCart className="w-4 h-4" />
                         <span>Add {quantity} to Cart (৳{pricing.totalBDT.toLocaleString()})</span>
                       </>
                     )}
@@ -251,35 +254,49 @@ export default function ProductModal({
             </div>
 
             {/* Specifications Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 border-t border-gray-800 text-xs">
-              <div className="p-3 rounded-xl bg-[#212430] border border-gray-800">
-                <span className="text-[10px] text-gray-400 block">Warranty</span>
-                <span className="font-medium text-white">{product.warrantyInformation || "1 Year Standard"}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.08] text-xs">
+              <div className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] flex items-center gap-3">
+                <ShieldCheck className="w-5 h-5 text-orange-400 shrink-0" />
+                <div>
+                  <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Warranty</span>
+                  <span className="font-semibold text-white">{product.warrantyInformation || "1 Year Official"}</span>
+                </div>
               </div>
-              <div className="p-3 rounded-xl bg-[#212430] border border-gray-800">
-                <span className="text-[10px] text-gray-400 block">Shipping</span>
-                <span className="font-medium text-white">{product.shippingInformation || "Ships in 2-3 days"}</span>
+
+              <div className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] flex items-center gap-3">
+                <Truck className="w-5 h-5 text-cyan-400 shrink-0" />
+                <div>
+                  <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Shipping</span>
+                  <span className="font-semibold text-white">{product.shippingInformation || "Ships in 2-3 Days"}</span>
+                </div>
               </div>
-              <div className="p-3 rounded-xl bg-[#212430] border border-gray-800">
-                <span className="text-[10px] text-gray-400 block">Return Policy</span>
-                <span className="font-medium text-white">{product.returnPolicy || "30 Days return"}</span>
+
+              <div className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] flex items-center gap-3">
+                <RotateCcw className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div>
+                  <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Return Policy</span>
+                  <span className="font-semibold text-white">{product.returnPolicy || "7 Days Return"}</span>
+                </div>
               </div>
             </div>
 
             {/* Customer Reviews */}
             {product.reviews?.length > 0 && (
-              <div className="space-y-3 pt-2 border-t border-gray-800">
-                <h3 className="text-xs font-bold font-serif text-white uppercase tracking-wider">
-                  Verified Reviews ({product.reviews.length})
+              <div className="space-y-3 pt-3 border-t border-white/[0.08]">
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider font-['Outfit']">
+                  Customer Feedback ({product.reviews.length})
                 </h3>
-                <div className="space-y-2">
-                  {product.reviews.slice(0, 3).map((rev, i) => (
-                    <div key={i} className="p-3 rounded-xl bg-[#212430] border border-gray-800/80 text-xs">
-                      <div className="flex items-center justify-between text-gray-400 mb-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {product.reviews.slice(0, 2).map((rev, i) => (
+                    <div key={i} className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] text-xs space-y-1">
+                      <div className="flex items-center justify-between text-slate-400">
                         <span className="font-semibold text-white">{rev.reviewerName}</span>
-                        <span className="text-amber-400 font-mono">★ {rev.rating}</span>
+                        <div className="flex items-center gap-1 text-amber-400 font-mono text-xs">
+                          <Star className="w-3 h-3 fill-current" />
+                          <span>{rev.rating}</span>
+                        </div>
                       </div>
-                      <p className="text-gray-300 italic">"{rev.comment}"</p>
+                      <p className="text-slate-300 text-xs italic">&ldquo;{rev.comment}&rdquo;</p>
                     </div>
                   ))}
                 </div>

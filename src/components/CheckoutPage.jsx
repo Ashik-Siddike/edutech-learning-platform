@@ -72,9 +72,8 @@ export default function CheckoutPage({
   );
   const originalSavings = totalOriginal > subtotal ? totalOriginal - subtotal : 0;
 
-  // Check if cart contains physical goods (products) vs digital courses
-  const hasPhysicalProducts = cart.some((item) => String(item.id).startsWith("prod-"));
-  const shippingFee = hasPhysicalProducts ? 60 : 0; // Free for digital courses
+  // Free Express shipping for orders of ৳2,500 or more
+  const shippingFee = subtotal >= 2500 ? 0 : 80;
 
   // Coupon discount calculation using centralized validation engine
   let couponDiscount = 0;
@@ -214,7 +213,7 @@ export default function CheckoutPage({
       callback: () => {
         // Construct printable invoice on success
         const invoiceData = {
-          orderId: `EDU-${Math.floor(100000 + Math.random() * 900000)}`,
+          orderId: `SFX-${Math.floor(100000 + Math.random() * 900000)}`,
           orderDate: new Date().toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
@@ -234,29 +233,10 @@ export default function CheckoutPage({
 
         setOrderPlaced(invoiceData);
 
-        // Save to localStorage for Student Dashboard
+        // Save to localStorage for Customer Order Tracking
         try {
           const prevOrders = JSON.parse(localStorage.getItem("orderHistory") || "[]");
           localStorage.setItem("orderHistory", JSON.stringify([invoiceData, ...prevOrders]));
-
-          const prevEnrolled = JSON.parse(localStorage.getItem("enrolledCourses") || "[]");
-          const newEnrolledCourses = cart
-            .filter((item) => !String(item.id).startsWith("prod-"))
-            .map((c) => ({
-              ...c,
-              enrolledAt: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-              progress: 25, // Starting progress
-              completedLessons: 4,
-              totalLessons: c.lessonsCount || 40,
-            }));
-
-          const mergedEnrolled = [...prevEnrolled];
-          newEnrolledCourses.forEach((c) => {
-            if (!mergedEnrolled.some((m) => m.id === c.id)) {
-              mergedEnrolled.push(c);
-            }
-          });
-          localStorage.setItem("enrolledCourses", JSON.stringify(mergedEnrolled));
         } catch (err) {
           console.warn("Could not save to localStorage:", err);
         }
@@ -345,7 +325,7 @@ export default function CheckoutPage({
                       <div>
                         <span className="font-semibold text-white block">{item.title}</span>
                         <span className="text-[11px] text-gray-400">
-                          {item.id?.toString().startsWith("prod-") ? "Store Product" : "Course Track"}
+                          {item.category ? item.category.toUpperCase() : "STORE ITEM"}
                         </span>
                       </div>
                     </div>

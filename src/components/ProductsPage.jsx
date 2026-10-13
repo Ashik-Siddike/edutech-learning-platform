@@ -3,6 +3,17 @@ import useProducts from "../hooks/useProducts";
 import useDebounce from "../hooks/useDebounce";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
+import {
+  Search,
+  SlidersHorizontal,
+  Sparkles,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  AlertTriangle,
+  Loader2,
+  PackageSearch,
+} from "lucide-react";
 
 export default function ProductsPage({
   cart = [],
@@ -15,7 +26,7 @@ export default function ProductsPage({
   const isDebouncing = searchQuery !== debouncedSearchQuery;
 
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [sortBy, setSortBy] = useState("default"); // "default" | "price-asc" | "price-desc" | "rating-desc" | "title-asc"
+  const [sortBy, setSortBy] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -69,22 +80,18 @@ export default function ProductsPage({
     { id: "womens-dresses", label: "Women's Wear" },
   ];
 
-  // Total pages
   const totalPages = Math.ceil(total / itemsPerPage) || 1;
 
-  // Handle category change
   const handleCategoryChange = (catId) => {
     setSelectedCategory(catId);
     setCurrentPage(1);
   };
 
-  // Handle search query
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  // Reset all filters
   const handleResetFilters = () => {
     setSearchQuery("");
     setSelectedCategory("all");
@@ -92,289 +99,281 @@ export default function ProductsPage({
     setCurrentPage(1);
   };
 
-
-
-  // Check if a product is in cart
   const isProductInCart = (id) => cart.some((item) => item.id === `prod-${id}`);
 
   return (
-    <div className="w-full min-h-screen bg-[#12131a] text-gray-200 py-10 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header banner */}
-        <div className="relative rounded-3xl bg-gradient-to-r from-[#191b24] via-[#212430] to-[#191b24] p-6 sm:p-10 border border-gray-800 shadow-2xl overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-950/60 border border-orange-700/50 text-orange-400 text-xs font-semibold mb-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>Live DummyJSON API Integration</span>
-            </div>
-
-            <h1 className="text-2xl sm:text-4xl font-serif font-black text-white tracking-tight leading-tight mb-2">
-              Products & <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] to-[#f98054]">Gadgets Store</span>
-            </h1>
-
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-              Explore authentic products fetched live from DummyJSON via our custom Axios client and React hooks (<code className="text-orange-300 font-mono text-xs">useProducts</code> &amp; <code className="text-orange-300 font-mono text-xs">useProduct</code>).
-            </p>
-          </div>
-        </div>
-
-        {/* Filter & Search Bar */}
-        <div className="bg-[#191b24] p-4 sm:p-5 rounded-2xl border border-gray-800 shadow-md space-y-4">
-          <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-            {/* Search Input with Debounce Status */}
-            <div className="relative flex-1 max-w-md">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                placeholder="Search products by title, brand, tag..."
-                className="w-full pl-10 pr-24 py-2.5 rounded-xl bg-[#212430] border border-gray-700 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-orange-500 transition"
-              />
-              <svg
-                className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-
-              <div className="absolute right-3 top-2.5 flex items-center gap-1.5">
-                {isDebouncing && (
-                  <span className="text-[10px] text-amber-400 font-mono flex items-center gap-1 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800/60 animate-pulse">
-                    <span>⚡</span>
-                    <span>Waiting...</span>
-                  </span>
-                )}
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="text-gray-400 hover:text-white text-xs p-0.5"
-                    title="Clear search"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Sort & Quick Refetch */}
-            <div className="flex items-center gap-2.5">
-              <div className="relative">
-                <select
-                  value={sortBy}
-                  onChange={(e) => {
-                    setSortBy(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="px-3 py-2.5 rounded-xl bg-[#212430] border border-gray-700 text-gray-200 text-xs font-medium focus:outline-none focus:border-orange-500 cursor-pointer appearance-none pr-8"
-                >
-                  <option value="default">Sort: Default</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="rating-desc">Highest Rated</option>
-                  <option value="title-asc">Title: A to Z</option>
-                </select>
-                <svg
-                  className="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-3.5 pointer-events-none"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-
-              {/* Refresh Button */}
-              <button
-                type="button"
-                onClick={refetch}
-                disabled={loading}
-                title="Reload products from API"
-                className="p-2.5 rounded-xl bg-[#212430] hover:bg-[#2b2f3e] border border-gray-700 text-gray-300 hover:text-white transition cursor-pointer disabled:opacity-50"
-              >
-                <svg
-                  className={`w-4 h-4 ${loading ? "animate-spin text-orange-400" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-              </button>
-            </div>
+    <div className="w-full min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 animate-fadeIn">
+      {/* Top Header Banner */}
+      <div className="relative rounded-3xl bg-gradient-to-r from-[#141a2c] via-[#1a2238] to-[#121626] p-6 sm:p-10 border border-white/[0.1] shadow-2xl overflow-hidden">
+        <div className="relative z-10 max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>LIVE PRODUCT CATALOG</span>
           </div>
 
-          {/* Categories Pill Bar */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-            {categories.map((cat) => {
-              const active = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => handleCategoryChange(cat.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${active
-                    ? "bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white shadow"
-                    : "bg-[#212430] hover:bg-[#272b3a] text-gray-400 hover:text-white border border-gray-800"
-                    }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Status & Results Summary Bar */}
-        <div className="flex items-center justify-between text-xs text-gray-400 px-1">
-          <div>
-            Showing{" "}
-            <span className="font-bold text-white">
-              {products.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}-
-              {Math.min(currentPage * itemsPerPage, total)}
-            </span>{" "}
-            of <span className="font-bold text-orange-400">{total}</span> products
-          </div>
-
-          {selectedCategory !== "all" && (
-            <div className="flex items-center gap-1.5">
-              <span>Filtered by:</span>
-              <span className="font-semibold text-white uppercase bg-gray-800 px-2 py-0.5 rounded text-[11px]">
-                {selectedCategory}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Error State Banner */}
-        {error && (
-          <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-800/80 text-rose-300 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <svg className="w-5 h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-xs sm:text-sm font-medium">{error}</span>
-            </div>
-            <button
-              type="button"
-              onClick={refetch}
-              className="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer shrink-0 transition"
-            >
-              Retry
-            </button>
-          </div>
-        )}
-
-        {/* Loading Skeletons */}
-        {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="bg-[#191b24] border border-gray-800/80 rounded-2xl p-4 space-y-4 animate-pulse"
-              >
-                <div className="w-full aspect-[4/3] bg-gray-800/60 rounded-xl" />
-                <div className="space-y-2">
-                  <div className="w-1/3 h-3 bg-gray-800/80 rounded" />
-                  <div className="w-3/4 h-4 bg-gray-800 rounded" />
-                  <div className="w-full h-3 bg-gray-800/50 rounded" />
-                </div>
-                <div className="pt-2 border-t border-gray-800 flex justify-between items-center">
-                  <div className="w-1/4 h-5 bg-gray-800 rounded" />
-                  <div className="w-16 h-7 bg-gray-800 rounded-xl" />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Products Grid */}
-        {!loading && !error && products.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((prod) => (
-              <ProductCard
-                key={prod.id}
-                product={prod}
-                isInCart={isProductInCart(prod.id)}
-                onAddToCart={onAddToCart}
-                onRemoveFromCart={onRemoveFromCart}
-                onViewDetails={(p) => setSelectedProductId(p.id)}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && !error && products.length === 0 && (
-          <div className="text-center py-16 px-4 bg-[#191b24] rounded-3xl border border-gray-800">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-800/60 flex items-center justify-center text-gray-500">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-base font-serif font-bold text-white mb-1">
-              No products found
-            </h3>
-            <p className="text-xs text-gray-400 max-w-sm mx-auto mb-5">
-              We couldn't find any items matching your current search or category filter.
-            </p>
-            <button
-              type="button"
-              onClick={handleResetFilters}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white text-xs font-semibold hover:opacity-95 transition cursor-pointer"
-            >
-              Reset Filters
-            </button>
-          </div>
-        )}
-
-        {/* Pagination Bar */}
-        {!loading && totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 pt-4">
-            <button
-              type="button"
-              disabled={currentPage === 1}
-              onClick={() => {
-                setCurrentPage((p) => Math.max(p - 1, 1));
-                window.scrollTo({ top: 300, behavior: "smooth" });
-              }}
-              className="px-3 py-1.5 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-300 disabled:opacity-40 disabled:pointer-events-none border border-gray-700 text-xs font-medium cursor-pointer transition"
-            >
-              ← Previous
-            </button>
-
-            <span className="text-xs text-gray-400 px-3">
-              Page <span className="font-bold text-white">{currentPage}</span> of{" "}
-              <span className="font-bold text-white">{totalPages}</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-['Outfit'] tracking-tight">
+            Discover Premium{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
+              Gadgets & Goods
             </span>
+          </h1>
 
-            <button
-              type="button"
-              disabled={currentPage === totalPages}
-              onClick={() => {
-                setCurrentPage((p) => Math.min(p + 1, totalPages));
-                window.scrollTo({ top: 300, behavior: "smooth" });
-              }}
-              className="px-3 py-1.5 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-300 disabled:opacity-40 disabled:pointer-events-none border border-gray-700 text-xs font-medium cursor-pointer transition"
-            >
-              Next →
-            </button>
-          </div>
-        )}
+          <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+            Powered by live API integration, debounced high-speed search, and instant closure price calculation. Find authentic electronics, luxury fragrances, and home goods.
+          </p>
+        </div>
       </div>
 
-      {/* Standalone Dynamic Product Details Modal */}
-      <ProductModal
-        productId={selectedProductId}
-        onClose={() => setSelectedProductId(null)}
-        isInCart={selectedProductId ? isProductInCart(selectedProductId) : false}
-        onAddToCart={onAddToCart}
-        onRemoveFromCart={onRemoveFromCart}
-      />
+      {/* Control Bar: Search Input, Category Filter Pills, Sort Dropdown */}
+      <div className="space-y-4">
+        {/* Search & Sort Row */}
+        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+          {/* Debounced Search Bar */}
+          <div className="relative flex-1">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Search className="w-4 h-4 text-orange-400" />
+            </div>
+
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search by product name, brand, or model..."
+              className="w-full pl-10 pr-24 py-3 rounded-2xl bg-[#121829] border border-white/[0.1] focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-sm text-white placeholder-slate-400 outline-none transition shadow-inner"
+            />
+
+            {/* Debounce / Loading Status Indicator inside search input */}
+            <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center">
+              {isDebouncing ? (
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[10px] font-mono">
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  <span>Debouncing...</span>
+                </div>
+              ) : searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="text-xs text-slate-400 hover:text-white px-2 py-1 rounded cursor-pointer"
+                >
+                  Clear
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          {/* Sort By Dropdown */}
+          <div className="flex items-center gap-2">
+            <div className="relative shrink-0">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+              </div>
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  setSortBy(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-9 pr-8 py-3 rounded-2xl bg-[#121829] border border-white/[0.1] text-xs font-semibold text-slate-200 outline-none hover:border-orange-500/40 transition cursor-pointer appearance-none shadow-sm"
+              >
+                <option value="default" className="bg-[#121829] text-white">Featured Sort</option>
+                <option value="price-asc" className="bg-[#121829] text-white">Price: Low to High</option>
+                <option value="price-desc" className="bg-[#121829] text-white">Price: High to Low</option>
+                <option value="rating-desc" className="bg-[#121829] text-white">Highest Rated</option>
+                <option value="title-asc" className="bg-[#121829] text-white">Alphabetical (A-Z)</option>
+              </select>
+            </div>
+
+            {(searchQuery || selectedCategory !== "all" || sortBy !== "default") && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="p-3 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 hover:text-white border border-white/[0.1] transition cursor-pointer text-xs flex items-center gap-1.5"
+                title="Reset all filters"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Reset</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Category Horizontal Filter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          {categories.map((cat) => {
+            const isActive = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => handleCategoryChange(cat.id)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 ${
+                  isActive
+                    ? "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white shadow-lg shadow-orange-950/50"
+                    : "bg-[#121829] hover:bg-white/[0.08] text-slate-300 border border-white/[0.08]"
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Results Metadata Bar */}
+        <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+          <div>
+            Showing <strong className="text-white font-mono">{products.length}</strong> of{" "}
+            <strong className="text-white font-mono">{total}</strong> items
+            {selectedCategory !== "all" && (
+              <span> in <strong className="text-orange-400 capitalize">{selectedCategory}</strong></span>
+            )}
+            {debouncedSearchQuery && (
+              <span> matching &quot;<strong className="text-white">{debouncedSearchQuery}</strong>&quot;</span>
+            )}
+          </div>
+
+          <div className="text-[11px] font-mono text-slate-400">
+            Page {currentPage} of {totalPages}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content: Loading, Error, or Product Grid */}
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          {[...Array(itemsPerPage)].map((_, idx) => (
+            <div
+              key={idx}
+              className="rounded-2xl bg-[#121829] border border-white/[0.06] p-4 space-y-3 animate-pulse"
+            >
+              <div className="aspect-[4/3] rounded-xl bg-white/[0.04]" />
+              <div className="h-4 bg-white/[0.06] rounded w-3/4" />
+              <div className="h-3 bg-white/[0.04] rounded w-1/2" />
+              <div className="h-6 bg-white/[0.05] rounded w-1/3 pt-2" />
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <div className="rounded-3xl bg-[#151a2c] border border-rose-500/30 p-12 text-center max-w-lg mx-auto space-y-4 shadow-2xl">
+          <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
+            <AlertTriangle className="w-7 h-7" />
+          </div>
+          <h3 className="text-lg font-bold text-white font-['Outfit']">Failed to Load Products</h3>
+          <p className="text-xs text-rose-300/80 leading-relaxed">{error}</p>
+          <button
+            type="button"
+            onClick={refetch}
+            className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold cursor-pointer shadow-lg transition"
+          >
+            Retry Fetching
+          </button>
+        </div>
+      ) : products.length === 0 ? (
+        <div className="rounded-3xl bg-[#121829] border border-white/[0.08] p-16 text-center max-w-md mx-auto space-y-4 shadow-xl">
+          <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center mx-auto text-slate-400">
+            <PackageSearch className="w-8 h-8 text-orange-400" />
+          </div>
+          <h3 className="text-lg font-bold text-white font-['Outfit']">No products found</h3>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            No items matched your search criteria. Try modifying your keywords or resetting filters.
+          </p>
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg transition cursor-pointer"
+          >
+            Reset Filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          {products.map((item) => (
+            <ProductCard
+              key={item.id}
+              product={item}
+              isInCart={isProductInCart(item.id)}
+              onAddToCart={onAddToCart}
+              onRemoveFromCart={onRemoveFromCart}
+              onViewDetails={(prod) => setSelectedProductId(prod.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {!loading && !error && totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-6">
+          <button
+            type="button"
+            disabled={currentPage === 1}
+            onClick={() => {
+              setCurrentPage((prev) => Math.max(1, prev - 1));
+              window.scrollTo({ top: 180, behavior: "smooth" });
+            }}
+            className="p-2.5 rounded-xl bg-[#121829] border border-white/[0.1] text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {[...Array(totalPages)].map((_, i) => {
+              const pageNum = i + 1;
+              // Show first, last, and near current
+              if (
+                pageNum === 1 ||
+                pageNum === totalPages ||
+                (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+              ) {
+                return (
+                  <button
+                    key={pageNum}
+                    type="button"
+                    onClick={() => {
+                      setCurrentPage(pageNum);
+                      window.scrollTo({ top: 180, behavior: "smooth" });
+                    }}
+                    className={`w-9 h-9 rounded-xl text-xs font-bold font-mono transition cursor-pointer ${
+                      currentPage === pageNum
+                        ? "bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-lg"
+                        : "bg-[#121829] text-slate-400 hover:text-white border border-white/[0.08]"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              }
+              if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                return <span key={pageNum} className="text-slate-500 text-xs px-1">...</span>;
+              }
+              return null;
+            })}
+          </div>
+
+          <button
+            type="button"
+            disabled={currentPage === totalPages}
+            onClick={() => {
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+              window.scrollTo({ top: 180, behavior: "smooth" });
+            }}
+            className="p-2.5 rounded-xl bg-[#121829] border border-white/[0.1] text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+            aria-label="Next page"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Quick View Product Modal with JS Closure Price Calculation */}
+      {selectedProductId && (
+        <ProductModal
+          productId={selectedProductId}
+          onClose={() => setSelectedProductId(null)}
+          isInCart={isProductInCart(selectedProductId)}
+          onAddToCart={onAddToCart}
+          onRemoveFromCart={onRemoveFromCart}
+        />
+      )}
     </div>
   );
 }

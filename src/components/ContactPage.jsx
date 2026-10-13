@@ -1,12 +1,25 @@
-// Contact Page with inquiry form, campus details, office hours, and interactive FAQ accordion
 import { useState } from "react";
+import {
+  Headphones,
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  MessageSquare,
+  HelpCircle,
+  ChevronDown,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  Sparkles,
+} from "lucide-react";
 
 export default function ContactPage({ onShowToast }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    subject: "Full Stack Web (MERN)",
+    subject: "Order Inquiry",
     message: "",
   });
 
@@ -15,24 +28,24 @@ export default function ContactPage({ onShowToast }) {
 
   const faqs = [
     {
-      q: "Are the classes conducted online or offline?",
-      a: "We offer both flexible online live interactive batches (streamed via Zoom with recording access) and hands-on weekend offline lab sessions at our Dhanmondi campus.",
+      q: "What is your standard delivery timeframe in Bangladesh?",
+      a: "Orders inside Dhaka metropolitan city are delivered within 24 to 36 hours. For all other districts across Bangladesh, delivery takes 48 to 72 hours via our authorized courier partners (Steadfast & Pathao Courier).",
     },
     {
-      q: "Do I need a Computer Science background to join?",
-      a: "No prior CS degree is required. Our beginner-friendly tracks start from fundamental problem-solving concepts and progress to advanced architectures with dedicated mentor support.",
+      q: "Are all electronics and lifestyle products 100% genuine?",
+      a: "Yes! Every single product listed in Suffex Store is sourced directly from verified manufacturer distributors and official brand importers. All devices come with standard 1-year brand warranty and official serial registration.",
     },
     {
-      q: "Can I pay the course fee in installments?",
-      a: "Yes! All courses priced above ৳5,000 can be paid in 2 or 3 convenient monthly installments without any additional charges or interest.",
+      q: "How can I apply discount coupon codes during checkout?",
+      a: "You can enter your promo code (e.g. STORE20, SUFFEX500, or TECH15) directly in the Shopping Cart drawer or during Checkout. Once applied, your discount will be instantly deducted from your subtotal.",
     },
     {
-      q: "How does the job placement support work?",
-      a: "After completing your capstone project, our placement cell conducts mock technical interviews, optimizes your GitHub and resume, and arranges direct interview opportunities with 120+ partner tech companies.",
+      q: "What payment options do you support?",
+      a: "We support Cash on Delivery (COD) across Bangladesh, instant Mobile Financial Services (bKash, Nagad, Rocket), and secure Visa / MasterCard debit & credit card transactions with SSLCommerz encryption.",
     },
     {
-      q: "Will I receive an industry-recognized certificate?",
-      a: "Yes, upon passing your capstone assessments and project defense, you will receive a verifiable digital certificate with a unique verification URL for LinkedIn and resumes.",
+      q: "What is your return and replacement policy?",
+      a: "We provide an unconditional 7-day replacement guarantee if you receive a product with any technical malfunction or transit damage. Simply contact our hotline or initiate a request with your order ID.",
     },
   ];
 
@@ -41,257 +54,219 @@ export default function ContactPage({ onShowToast }) {
     setSubmitted(true);
     if (onShowToast) {
       onShowToast(
-        `Thank you, ${formData.name}! Your message has been received. Our counselor will call you shortly.`
+        `Thank you, ${formData.name}! Your inquiry has been dispatched to our VIP Care Team.`
       );
     }
     setFormData({
       name: "",
       email: "",
       phone: "",
-      subject: "Full Stack Web (MERN)",
+      subject: "Order Inquiry",
       message: "",
     });
-    setTimeout(() => setSubmitted(false), 5000);
+    setTimeout(() => setSubmitted(false), 4000);
   };
 
   return (
-    <div className="w-full text-white animate-fadeIn pb-20">
-      {/* Header */}
-      <section className="relative overflow-hidden bg-[#161822] border-b border-gray-800 py-16 text-center">
-        <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-orange-600/10 blur-3xl pointer-events-none" />
-        <div className="max-w-3xl mx-auto px-4 relative z-10 space-y-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#6e3333]/50 text-orange-200 border border-orange-900/60">
-            Admissions & Student Support
-          </span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-white tracking-tight">
-            Contact & Academic Support
+    <div className="w-full text-slate-100 animate-fadeIn pb-24 font-sans">
+      {/* Header Banner */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#141a2c] via-[#1a2238] to-[#121626] border-b border-white/[0.08] py-16 text-center px-4">
+        <div className="max-w-3xl mx-auto space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-semibold">
+            <Headphones className="w-3.5 h-3.5" />
+            <span>24/7 CUSTOMER CARE & SUPPORT</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl font-black text-white font-['Outfit'] tracking-tight">
+            How Can We{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
+              Help You Today?
+            </span>
           </h1>
-          <p className="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-xl mx-auto">
-            Have questions regarding admissions, curriculum, payment plans, or career counseling? Reach out directly to our team.
+
+          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+            Need help tracking a shipment, inquiring about product availability, or claiming warranty? Our dedicated customer team is ready to assist you.
           </p>
         </div>
       </section>
 
-      {/* Main Grid: Info + Contact Form */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Left Contact Information */}
-          <div className="lg:col-span-5 space-y-6">
-            <h2 className="text-2xl font-serif font-bold text-white">
-              Get in Touch Directly
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-              Visit our innovation campus, give us a phone call, or send an inquiry. Our admissions office is open 6 days a week.
-            </p>
-
-            <div className="space-y-4 pt-2">
-              <div className="p-4 rounded-2xl bg-[#212430] border border-gray-700/60 flex items-start gap-3.5 shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-orange-950/60 text-orange-400 border border-orange-800/40 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xs font-semibold text-white uppercase tracking-wider">
-                    Campus Location
-                  </h3>
-                  <p className="text-xs text-gray-300 mt-0.5">
-                    Level 7, Software Technology Park, Dhanmondi 27, Dhaka - 1205, Bangladesh
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#212430] border border-gray-700/60 flex items-start gap-3.5 shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-cyan-950/60 text-cyan-400 border border-cyan-800/40 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xs font-semibold text-white uppercase tracking-wider">
-                    Hotline & WhatsApp
-                  </h3>
-                  <p className="text-xs text-gray-300 mt-0.5">
-                    +880 1712-345678 / +880 1987-654321
-                  </p>
-                  <p className="text-[11px] text-gray-400">
-                    Available: Sat - Thu (10:00 AM - 8:00 PM)
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#212430] border border-gray-700/60 flex items-start gap-3.5 shadow-lg">
-                <div className="w-10 h-10 rounded-xl bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-xs font-semibold text-white uppercase tracking-wider">
-                    Official Email
-                  </h3>
-                  <p className="text-xs text-gray-300 mt-0.5">
-                    admissions@tawhidacademy.com
-                  </p>
-                  <p className="text-[11px] text-gray-400">
-                    support@tawhidacademy.com
-                  </p>
-                </div>
-              </div>
+      {/* Main Grid: Channels + Inquiry Form */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 space-y-16">
+        {/* Contact Channels Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="p-6 rounded-3xl bg-[#12182a] border border-white/[0.08] hover:border-orange-500/30 transition shadow-xl space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center">
+              <Phone className="w-6 h-6" />
             </div>
+            <h3 className="text-base font-bold text-white font-['Outfit']">Official Phone Hotline</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Available 7 days a week, 9:00 AM to 10:00 PM for instant order assistance.
+            </p>
+            <span className="font-mono text-sm font-bold text-orange-400 block pt-1">
+              +880 1800-SUFFEX (783339)
+            </span>
           </div>
 
-          {/* Right Inquiry Form */}
-          <div className="lg:col-span-7">
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#212430] border border-gray-700 shadow-2xl relative">
-              <h3 className="text-xl font-serif font-bold text-white mb-1">
-                Send an Inquiry Message
-              </h3>
-              <p className="text-xs text-gray-400 mb-6">
-                Fill in the details below and an academic counselor will connect with you within 2 business hours.
+          <div className="p-6 rounded-3xl bg-[#12182a] border border-white/[0.08] hover:border-cyan-500/30 transition shadow-xl space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+              <Mail className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-white font-['Outfit']">Email Support Desk</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Send us corporate orders, warranty inquiries, or partner proposals.
+            </p>
+            <span className="font-mono text-sm font-bold text-cyan-400 block pt-1">
+              support@suffexstore.com
+            </span>
+          </div>
+
+          <div className="p-6 rounded-3xl bg-[#12182a] border border-white/[0.08] hover:border-emerald-500/30 transition shadow-xl space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <MapPin className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-white font-['Outfit']">Flagship Experience Hub</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Level 4, Suffex IT Tower, Dhanmondi 27, Dhaka-1209, Bangladesh.
+            </p>
+            <span className="text-xs font-semibold text-emerald-400 block pt-1">
+              Walk-in Experience Center
+            </span>
+          </div>
+        </div>
+
+        {/* 2-Column: Inquiry Form & Interactive FAQ */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Left Column: Form */}
+          <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-[#12182a] border border-white/[0.08] shadow-2xl space-y-5">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white font-['Outfit']">
+                Send Us a Quick Message
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                Fill out the form below and our customer representative will get in touch within 2 hours.
               </p>
+            </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-300 mb-1">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Tanvir Hasan"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-[#191b24] border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-gray-300 mb-1">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="e.g. tanvir@example.com"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-[#191b24] border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-300 mb-1">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="e.g. 01712345678"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-[#191b24] border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-gray-300 mb-1">
-                      Course of Interest
-                    </label>
-                    <select
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-[#191b24] border border-gray-700 text-white focus:outline-none focus:border-orange-500 cursor-pointer"
-                    >
-                      <option>Full Stack Web (MERN)</option>
-                      <option>Frontend Mastery (React & Next.js)</option>
-                      <option>Python, Django & Machine Learning</option>
-                      <option>DevOps & Cloud Computing</option>
-                      <option>Mobile App Development (Flutter)</option>
-                      <option>UI/UX & Product Design</option>
-                      <option>General Admission Inquiry</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">
-                    Your Message / Question *
-                  </label>
-                  <textarea
-                    rows={4}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">Your Full Name</label>
+                  <input
+                    type="text"
                     required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell us about your learning goals or any questions you have..."
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-[#191b24] border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 resize-none"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Tanvir Ahmed"
+                    className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition"
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full py-3 px-4 rounded-xl font-semibold text-xs text-white bg-gradient-to-r from-[#b0401d] via-[#c44c25] to-[#df5d2c] hover:opacity-95 shadow-xl shadow-orange-950/40 transition active:scale-95 cursor-pointer"
-                >
-                  Send Inquiry Message →
-                </button>
-              </form>
-
-              {submitted && (
-                <div className="mt-4 p-3 rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-300 text-xs text-center font-medium flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Message sent successfully! We will get in touch with you shortly.</span>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">Phone Number</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="017XXXXXXXX"
+                    className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition"
+                  />
                 </div>
-              )}
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-300">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="tanvir@example.com"
+                  className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-300">Inquiry Subject</label>
+                <select
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white focus:border-orange-500 outline-none transition cursor-pointer"
+                >
+                  <option value="Order Inquiry">Order Status & Delivery Tracking</option>
+                  <option value="Warranty Claim">Warranty Claim & Technical Support</option>
+                  <option value="Coupon Inquiry">Promo Coupons & Special Discounts</option>
+                  <option value="Corporate Order">Bulk Corporate Wholesale Purchase</option>
+                  <option value="Other">General Feedback or Inquiries</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-300">Your Message</label>
+                <textarea
+                  rows={4}
+                  required
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Describe your inquiry or include your Order ID..."
+                  className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg shadow-orange-950/40 hover:opacity-95 transition cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Send className="w-4 h-4" />
+                <span>Submit Inquiry</span>
+              </button>
+            </form>
+          </div>
+
+          {/* Right Column: FAQ Accordion */}
+          <div className="lg:col-span-6 space-y-4">
+            <div className="space-y-1 mb-2">
+              <span className="text-xs font-bold text-orange-400 uppercase tracking-wider font-['Outfit']">
+                FREQUENTLY ASKED QUESTIONS
+              </span>
+              <h2 className="text-2xl font-bold text-white font-['Outfit']">
+                Help & Shopping Guide
+              </h2>
+            </div>
+
+            <div className="space-y-3">
+              {faqs.map((faq, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-2xl bg-[#12182a] border border-white/[0.08] overflow-hidden transition-all duration-200"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(isOpen ? -1 : idx)}
+                      className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold text-white hover:text-orange-400 transition cursor-pointer"
+                    >
+                      <span className="font-['Outfit']">{faq.q}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-orange-400 shrink-0 transition-transform duration-200 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs text-slate-300 leading-relaxed border-t border-white/[0.04] pt-3">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Frequently Asked Questions */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="text-center mb-10">
-          <span className="text-xs font-semibold uppercase tracking-wider text-orange-400">
-            Got Questions?
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mt-1">
-            Frequently Asked Questions
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaq === idx;
-            return (
-              <div
-                key={idx}
-                className="rounded-2xl bg-[#212430] border border-gray-700/70 overflow-hidden transition"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(isOpen ? -1 : idx)}
-                  className="w-full p-4 text-left flex items-center justify-between text-xs sm:text-sm font-serif font-semibold text-white hover:text-orange-300 transition cursor-pointer"
-                >
-                  <span>{faq.q}</span>
-                  <span className="text-orange-400 text-base font-bold ml-3">
-                    {isOpen ? "−" : "+"}
-                  </span>
-                </button>
-                {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-gray-300 leading-relaxed border-t border-gray-800/80">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      </div>
     </div>
   );
 }
