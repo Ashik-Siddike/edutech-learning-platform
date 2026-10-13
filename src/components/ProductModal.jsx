@@ -1,6 +1,9 @@
 // ProductModal component: Displays detailed product information in a modal dialog
 // Fetches live data dynamically using useProduct hook
+// Calculates dynamic pricing using a JavaScript Closure function
+import { useState, useEffect, useMemo } from "react";
 import { useProduct } from "../hooks/useProduct";
+import { createPriceCalculator } from "../helpers/priceCalculator";
 
 export default function ProductModal({
   productId,
@@ -11,6 +14,32 @@ export default function ProductModal({
 }) {
   // Dynamically fetch product details using the hook
   const { product, loading, error, refetch } = useProduct(productId);
+
+  // Interactive quantity state
+  const [quantity, setQuantity] = useState(1);
+
+  // Reset quantity when modal opens for a new product
+  useEffect(() => {
+    setQuantity(1);
+  }, [productId]);
+
+  /**
+   * Instantiate the price calculator function using a JavaScript Closure.
+   * The outer function `createPriceCalculator` captures config variables (vatRate: 0.05, exchangeRate: 120)
+   * in its lexical scope. The returned inner function calculates the price on demand.
+   */
+  const calculatePriceWithClosure = useMemo(() => {
+    return createPriceCalculator({
+      vatRate: 0.05, // 5% VAT
+      exchangeRate: 120, // 1 USD = 120 BDT
+      currencySymbol: "৳",
+    });
+  }, []);
+
+  // Compute live pricing via the closure
+  const pricing = useMemo(() => {
+    return calculatePriceWithClosure(product, quantity);
+  }, [calculatePriceWithClosure, product, quantity]);
 
   if (!productId) return null;
 
@@ -120,8 +149,57 @@ export default function ProductModal({
                   </p>
                 </div>
 
+                {/* Interactive Quantity Selector & Closure Price Breakdown */}
+                <div className="p-3.5 rounded-2xl bg-[#14161f] border border-gray-800 space-y-2.5 mt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-300 font-semibold">Quantity</span>
+                    <div className="flex items-center gap-2 bg-[#212430] rounded-xl border border-gray-700 p-1">
+                      <button
+                        type="button"
+                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        disabled={quantity <= 1}
+                        className="w-6 h-6 rounded-lg bg-gray-800 hover:bg-gray-700 disabled:opacity-30 text-white flex items-center justify-center text-xs font-bold transition cursor-pointer"
+                      >
+                        -
+                      </button>
+                      <span className="w-6 text-center text-xs font-mono font-bold text-white">
+                        {quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setQuantity((q) => q + 1)}
+                        className="w-6 h-6 rounded-lg bg-gray-800 hover:bg-gray-700 text-white flex items-center justify-center text-xs font-bold transition cursor-pointer"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Closure Calculated Breakdown */}
+                  <div className="space-y-1 pt-2 border-t border-gray-800 text-[11px] text-gray-400">
+                    <div className="flex justify-between items-center text-[10px]">
+                      <span className="px-1.5 py-0.5 rounded bg-orange-950/60 text-orange-400 border border-orange-800/40 font-mono">
+                        ⚡ Closure Calculated
+                      </span>
+                      <span>VAT (5%): ${pricing.vatAmountUSD}</span>
+                    </div>
+
+                    <div className="flex justify-between items-baseline pt-1">
+                      <span className="text-gray-300">Total ({quantity} {quantity === 1 ? "unit" : "units"}):</span>
+                      <div className="text-right">
+                        <span className="font-mono text-sm font-bold text-orange-400">
+                          ৳{pricing.totalBDT.toLocaleString()}
+                        </span>
+                        <span className="font-mono text-[10px] text-gray-400 block">
+                          (${pricing.totalUSD.toFixed(2)} USD)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Cart Action Button */}
-                <div className="pt-4 border-t border-gray-800 flex items-center gap-3">
+                <div className="pt-3 border-t border-gray-800 flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() => {
@@ -132,11 +210,12 @@ export default function ProductModal({
                           onAddToCart({
                             id: `prod-${product.id}`,
                             title: product.title,
-                            price: Math.round(product.price * 120),
+                            price: pricing.totalBDT,
                             originalPrice: Math.round(
-                              (product.price / (1 - product.discountPercentage / 100)) * 120
+                              (product.price * pricing.quantity) * 120
                             ),
-                            displayPriceUSD: `$${product.price.toFixed(2)}`,
+                            displayPriceUSD: `$${pricing.totalUSD.toFixed(2)}`,
+                            quantity: pricing.quantity,
                             image: product.thumbnail,
                             directImage: product.thumbnail,
                             category: product.category,
@@ -163,7 +242,7 @@ export default function ProductModal({
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                         </svg>
-                        <span>Add to Cart</span>
+                        <span>Add {quantity} to Cart (৳{pricing.totalBDT.toLocaleString()})</span>
                       </>
                     )}
                   </button>

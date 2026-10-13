@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import useProducts from "../hooks/useProducts";
+import useDebounce from "../hooks/useDebounce";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal";
 
@@ -10,6 +11,9 @@ export default function ProductsPage({
 }) {
   // Filter and pagination state
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 400);
+  const isDebouncing = searchQuery !== debouncedSearchQuery;
+
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("default"); // "default" | "price-asc" | "price-desc" | "rating-desc" | "title-asc"
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +38,7 @@ export default function ProductsPage({
     }
   }, [sortBy]);
 
-  // Fetch products using custom hook
+  // Fetch products using custom hook with debounced search query params
   const {
     products,
     total,
@@ -42,7 +46,7 @@ export default function ProductsPage({
     error,
     refetch,
   } = useProducts({
-    search: searchQuery,
+    search: debouncedSearchQuery,
     category: selectedCategory,
     limit: itemsPerPage,
     skip: (currentPage - 1) * itemsPerPage,
@@ -119,14 +123,14 @@ export default function ProductsPage({
         {/* Filter & Search Bar */}
         <div className="bg-[#191b24] p-4 sm:p-5 rounded-2xl border border-gray-800 shadow-md space-y-4">
           <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-            {/* Search Input */}
+            {/* Search Input with Debounce Status */}
             <div className="relative flex-1 max-w-md">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search products by title, brand, tag..."
-                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-[#212430] border border-gray-700 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-orange-500 transition"
+                className="w-full pl-10 pr-24 py-2.5 rounded-xl bg-[#212430] border border-gray-700 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-orange-500 transition"
               />
               <svg
                 className="w-4 h-4 text-gray-400 absolute left-3.5 top-3"
@@ -136,15 +140,25 @@ export default function ProductsPage({
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-3 text-gray-400 hover:text-white text-xs"
-                >
-                  ✕
-                </button>
-              )}
+
+              <div className="absolute right-3 top-2.5 flex items-center gap-1.5">
+                {isDebouncing && (
+                  <span className="text-[10px] text-amber-400 font-mono flex items-center gap-1 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800/60 animate-pulse">
+                    <span>⚡</span>
+                    <span>Waiting...</span>
+                  </span>
+                )}
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="text-gray-400 hover:text-white text-xs p-0.5"
+                    title="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Sort & Quick Refetch */}
