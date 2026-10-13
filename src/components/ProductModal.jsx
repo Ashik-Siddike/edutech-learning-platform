@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useProduct } from "../hooks/useProduct";
-import { createPriceCalculator } from "../helpers/priceCalculator";
+import { createProductPriceCalculator } from "../helpers/priceCalculator";
 import {
   X,
   Plus,
@@ -32,20 +32,32 @@ export default function ProductModal({
 
   /**
    * Price calculator function using a JavaScript Closure.
-   * `createPriceCalculator` captures config variables (vatRate: 0.05, exchangeRate: 120)
-   * in its lexical scope.
+   * `createProductPriceCalculator` encapsulates private state (quantity, vatRate, exchangeRate)
+   * in its lexical scope, exactly like Sir's `createNotification` and `createEmployee` examples.
    */
-  const calculatePriceWithClosure = useMemo(() => {
-    return createPriceCalculator({
+  const calculator = useMemo(() => {
+    return createProductPriceCalculator(product, {
       vatRate: 0.05, // 5% VAT
       exchangeRate: 120, // 1 USD = 120 BDT
       currencySymbol: "৳",
     });
-  }, []);
+  }, [product]);
 
   const pricing = useMemo(() => {
-    return calculatePriceWithClosure(product, quantity);
-  }, [calculatePriceWithClosure, product, quantity]);
+    return calculator.calculate(quantity);
+  }, [calculator, quantity]);
+
+  const handleIncreaseQuantity = () => {
+    calculator.setQuantity(quantity);
+    calculator.increaseQuantity();
+    setQuantity(calculator.getQuantity());
+  };
+
+  const handleDecreaseQuantity = () => {
+    calculator.setQuantity(quantity);
+    calculator.decreaseQuantity();
+    setQuantity(calculator.getQuantity());
+  };
 
   if (!productId) return null;
 
@@ -161,7 +173,7 @@ export default function ProductModal({
                     <div className="flex items-center gap-2 bg-[#040711] rounded-xl border border-white/10 p-1">
                       <button
                         type="button"
-                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                        onClick={handleDecreaseQuantity}
                         disabled={quantity <= 1}
                         className="w-6 h-6 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] disabled:opacity-30 text-white flex items-center justify-center transition cursor-pointer"
                         aria-label="Decrease quantity"
@@ -173,7 +185,7 @@ export default function ProductModal({
                       </span>
                       <button
                         type="button"
-                        onClick={() => setQuantity((q) => q + 1)}
+                        onClick={handleIncreaseQuantity}
                         className="w-6 h-6 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-white flex items-center justify-center transition cursor-pointer"
                         aria-label="Increase quantity"
                       >
