@@ -119,11 +119,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-sans relative selection:bg-[#df5d2c]/30 selection:text-orange-200">
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col font-sans relative selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Toast notification banner */}
       {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 bg-[#161d30]/95 backdrop-blur-xl text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-orange-500/40 text-xs font-semibold animate-bounce max-w-sm">
-          <div className="w-6 h-6 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
+        <div className="fixed bottom-20 md:bottom-6 right-4 sm:right-6 z-50 bg-[#070b14]/95 backdrop-blur-xl text-white px-5 py-3.5 rounded-2xl shadow-2xl shadow-cyan-950/50 flex items-center gap-3 border border-cyan-500/40 text-xs font-semibold animate-bounce max-w-sm">
+          <div className="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(6,182,212,0.3)]">
             ✓
           </div>
           <span className="leading-snug">{toastMessage}</span>

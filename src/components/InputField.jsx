@@ -21,7 +21,7 @@ export default function InputField({
         className={`w-full bg-transparent border-b pb-1 text-sm text-white placeholder-gray-500 outline-none transition ${
           error
             ? "border-red-400"
-            : "border-gray-500 focus:border-orange-400"
+            : "border-white/20 focus:border-cyan-400"
         }`}
       />
       {error && (

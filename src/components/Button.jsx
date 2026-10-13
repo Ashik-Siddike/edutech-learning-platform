@@ -9,10 +9,10 @@ export default function Button({
   const baseStyles = "transition cursor-pointer";
 
   const variants = {
-    primary: "w-full py-2.5 px-6 bg-[#6e3333] hover:bg-[#7e3b3b] text-white rounded-xl text-base font-serif shadow-md",
-    secondary: "px-4 py-2 border border-gray-600 rounded-xl text-xs font-serif text-gray-300 hover:bg-gray-800",
-    danger: "text-xs text-red-400 hover:text-red-300 font-medium",
-    link: "text-xs font-serif text-orange-400 hover:text-orange-300 hover:underline",
+    primary: "w-full py-2.5 px-6 bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:brightness-110 text-white rounded-xl text-sm font-semibold shadow-lg shadow-cyan-500/25",
+    secondary: "px-4 py-2 border border-white/10 rounded-xl text-xs text-slate-300 hover:bg-white/[0.08]",
+    danger: "text-xs text-rose-400 hover:text-rose-300 font-medium",
+    link: "text-xs text-cyan-400 hover:text-cyan-300 hover:underline font-semibold",
   };
 
   const selectedVariant = variants[variant] || variants.primary;

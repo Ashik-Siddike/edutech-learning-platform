@@ -16,14 +16,14 @@ export default function SelectField({
       </label>
       <select
         {...(register ? register(name, rules) : {})}
-        className={`w-full bg-[#212430] border-b pb-1 text-sm text-white outline-none transition ${
+        className={`w-full bg-[#070b14] border-b pb-1 text-sm text-white outline-none transition ${
           error
             ? "border-red-400"
-            : "border-gray-500 focus:border-orange-400"
+            : "border-white/20 focus:border-cyan-400"
         }`}
       >
         {placeholder && (
-          <option value="" className="bg-[#212430] text-gray-400">
+          <option value="" className="bg-[#070b14] text-slate-400">
             {placeholder}
           </option>
         )}
@@ -31,7 +31,7 @@ export default function SelectField({
           <option
             key={item.value || item}
             value={item.value || item}
-            className="bg-[#212430]"
+            className="bg-[#070b14]"
           >
             {item.label || item}
           </option>

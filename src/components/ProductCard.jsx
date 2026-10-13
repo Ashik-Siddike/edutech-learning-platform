@@ -43,18 +43,18 @@ export default function ProductCard({
   return (
     <div
       onClick={() => onViewDetails && onViewDetails(product)}
-      className="group relative rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#141a2c] to-[#0d1222] border border-white/[0.08] hover:border-orange-500/40 p-2.5 sm:p-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-orange-950/20 cursor-pointer flex flex-col justify-between"
+      className="group relative rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#0a0f1d] to-[#050813] border border-white/[0.08] hover:border-cyan-500/40 p-2.5 sm:p-4 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-950/30 cursor-pointer flex flex-col justify-between"
     >
       {/* Product Image Area */}
-      <div className="relative aspect-[4/3] rounded-lg sm:rounded-xl bg-[#090d18] overflow-hidden flex items-center justify-center p-2 sm:p-3 mb-2 sm:mb-3 border border-white/[0.04]">
+      <div className="relative aspect-[4/3] rounded-lg sm:rounded-xl bg-[#030610] overflow-hidden flex items-center justify-center p-2 sm:p-3 mb-2 sm:mb-3 border border-white/[0.04]">
         {/* Category Badge */}
-        <span className="absolute top-2 left-2 z-10 px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#0f1424]/90 text-orange-400 border border-orange-500/30 backdrop-blur-md">
+        <span className="absolute top-2 left-2 z-10 px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#080d1a]/90 text-cyan-400 border border-cyan-500/30 backdrop-blur-md">
           {product.category}
         </span>
 
         {/* Discount Badge */}
         {product.discountPercentage > 0 && (
-          <span className="absolute top-2 right-2 z-10 px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-extrabold text-white bg-gradient-to-r from-rose-600 to-rose-500 shadow-sm">
+          <span className="absolute top-2 right-2 z-10 px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-extrabold text-white bg-gradient-to-r from-violet-600 to-indigo-600 shadow-sm">
             -{Math.round(product.discountPercentage)}%
           </span>
         )}
@@ -71,9 +71,9 @@ export default function ProductCard({
         />
 
         {/* Quick View Hover Pill */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-          <span className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-[#121829]/90 text-white text-[11px] sm:text-xs font-semibold border border-white/20 shadow-xl flex items-center gap-1.5 backdrop-blur-md">
-            <Eye className="w-3.5 h-3.5 text-orange-400" />
+        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+          <span className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-[#090e1c]/95 text-white text-[11px] sm:text-xs font-semibold border border-white/20 shadow-xl flex items-center gap-1.5 backdrop-blur-md">
+            <Eye className="w-3.5 h-3.5 text-cyan-400" />
             <span>Quick View</span>
           </span>
         </div>
@@ -95,7 +95,7 @@ export default function ProductCard({
           </div>
 
           {/* Title */}
-          <h3 className="text-xs sm:text-sm font-bold text-white group-hover:text-orange-400 transition-colors line-clamp-2 font-['Outfit'] leading-snug">
+          <h3 className="text-xs sm:text-sm font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-2 font-['Outfit'] leading-snug">
             {product.title}
           </h3>
         </div>
@@ -125,7 +125,7 @@ export default function ProductCard({
             className={`p-2 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-md active:scale-90 shrink-0 ${
               isInCart
                 ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-950/40"
-                : "bg-white/[0.08] hover:bg-gradient-to-r hover:from-[#df5d2c] hover:to-[#ff7849] text-white hover:shadow-orange-950/50"
+                : "bg-white/[0.08] hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-600 text-white hover:shadow-cyan-950/50"
             }`}
             title={isInCart ? "Remove from cart" : "Add to cart"}
           >
@@ -136,7 +136,7 @@ export default function ProductCard({
               </>
             ) : (
               <>
-                <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400 group-hover:text-white" />
+                <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 group-hover:text-white" />
                 <span className="hidden sm:inline">Add</span>
               </>
             )}

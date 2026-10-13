@@ -55,7 +55,7 @@ export default function ProductModal({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#0e1424] border border-white/[0.12] rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-[#060a16] border border-white/[0.12] rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -71,7 +71,7 @@ export default function ProductModal({
         {/* Loading State */}
         {loading && (
           <div className="py-20 sm:py-24 text-center space-y-4">
-            <Loader2 className="w-9 h-9 text-orange-400 animate-spin mx-auto" />
+            <Loader2 className="w-9 h-9 text-cyan-400 animate-spin mx-auto" />
             <p className="text-xs text-slate-400">Loading product specifications via DummyJSON API...</p>
           </div>
         )}
@@ -99,7 +99,7 @@ export default function ProductModal({
             {/* Top Media & Information Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
               {/* Image Showcase */}
-              <div className="bg-[#080c16] rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-center aspect-[4/3] sm:aspect-square max-h-56 sm:max-h-none border border-white/[0.06] overflow-hidden">
+              <div className="bg-[#030610] rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center justify-center aspect-[4/3] sm:aspect-square max-h-56 sm:max-h-none border border-white/[0.06] overflow-hidden">
                 <img
                   src={product.thumbnail || product.images?.[0]}
                   alt={product.title}
@@ -111,7 +111,7 @@ export default function ProductModal({
               <div className="space-y-3 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/15 px-2 py-0.5 rounded-md border border-orange-500/30">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-500/15 px-2 py-0.5 rounded-md border border-cyan-500/30">
                       {product.category}
                     </span>
                     <span className="text-[11px] text-slate-400">
@@ -142,7 +142,7 @@ export default function ProductModal({
                         <span className="text-xs text-slate-500 line-through font-mono">
                           ${(product.price / (1 - product.discountPercentage / 100)).toFixed(2)}
                         </span>
-                        <span className="text-xs font-bold text-rose-400 bg-rose-500/20 px-2 py-0.5 rounded-md">
+                        <span className="text-xs font-bold text-violet-300 bg-violet-500/20 px-2 py-0.5 rounded-md border border-violet-500/30">
                           -{Math.round(product.discountPercentage)}% OFF
                         </span>
                       </>
@@ -155,10 +155,10 @@ export default function ProductModal({
                 </div>
 
                 {/* Interactive Quantity Selector & Closure Price Breakdown */}
-                <div className="p-4 rounded-2xl bg-[#12182a] border border-white/[0.08] space-y-3 mt-2 shadow-inner">
+                <div className="p-4 rounded-2xl bg-[#090e1c] border border-white/[0.08] space-y-3 mt-2 shadow-inner">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-slate-300 font-semibold font-['Outfit']">Quantity Selection</span>
-                    <div className="flex items-center gap-2 bg-[#0a0f1d] rounded-xl border border-white/10 p-1">
+                    <div className="flex items-center gap-2 bg-[#040711] rounded-xl border border-white/10 p-1">
                       <button
                         type="button"
                         onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -185,7 +185,7 @@ export default function ProductModal({
                   {/* Closure Calculated Breakdown */}
                   <div className="space-y-1.5 pt-2.5 border-t border-white/[0.08] text-[11px] text-slate-400">
                     <div className="flex justify-between items-center text-[10px]">
-                      <span className="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-400 border border-orange-500/30 font-mono font-semibold">
+                      <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-mono font-semibold">
                         ⚡ JS Closure Engine
                       </span>
                       <span>5% VAT: ${pricing.vatAmountUSD}</span>
@@ -194,7 +194,7 @@ export default function ProductModal({
                     <div className="flex justify-between items-baseline pt-1">
                       <span className="text-slate-300 font-medium">Grand Total ({quantity} {quantity === 1 ? "unit" : "units"}):</span>
                       <div className="text-right">
-                        <span className="font-mono text-base font-extrabold text-orange-400">
+                        <span className="font-mono text-base font-extrabold text-cyan-400">
                           ৳{pricing.totalBDT.toLocaleString()}
                         </span>
                         <span className="font-mono text-[10px] text-slate-400 block">
@@ -234,7 +234,7 @@ export default function ProductModal({
                     className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer shadow-lg active:scale-98 ${
                       isInCart
                         ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                        : "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white hover:opacity-95"
+                        : "bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white hover:opacity-95 shadow-cyan-950/40"
                     }`}
                   >
                     {isInCart ? (
@@ -255,15 +255,15 @@ export default function ProductModal({
 
             {/* Specifications Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.08] text-xs">
-              <div className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-orange-400 shrink-0" />
+              <div className="p-3.5 rounded-2xl bg-[#090e1c] border border-white/[0.06] flex items-center gap-3">
+                <ShieldCheck className="w-5 h-5 text-cyan-400 shrink-0" />
                 <div>
                   <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Warranty</span>
                   <span className="font-semibold text-white">{product.warrantyInformation || "1 Year Official"}</span>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] flex items-center gap-3">
+              <div className="p-3.5 rounded-2xl bg-[#090e1c] border border-white/[0.06] flex items-center gap-3">
                 <Truck className="w-5 h-5 text-cyan-400 shrink-0" />
                 <div>
                   <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Shipping</span>
@@ -271,7 +271,7 @@ export default function ProductModal({
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] flex items-center gap-3">
+              <div className="p-3.5 rounded-2xl bg-[#090e1c] border border-white/[0.06] flex items-center gap-3">
                 <RotateCcw className="w-5 h-5 text-emerald-400 shrink-0" />
                 <div>
                   <span className="text-[10px] text-slate-400 block uppercase tracking-wider">Return Policy</span>
@@ -288,7 +288,7 @@ export default function ProductModal({
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {product.reviews.slice(0, 2).map((rev, i) => (
-                    <div key={i} className="p-3.5 rounded-2xl bg-[#12182a] border border-white/[0.06] text-xs space-y-1">
+                    <div key={i} className="p-3.5 rounded-2xl bg-[#090e1c] border border-white/[0.06] text-xs space-y-1">
                       <div className="flex items-center justify-between text-slate-400">
                         <span className="font-semibold text-white">{rev.reviewerName}</span>
                         <div className="flex items-center gap-1 text-amber-400 font-mono text-xs">

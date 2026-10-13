@@ -104,17 +104,17 @@ export default function ProductsPage({
   return (
     <div className="w-full min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 animate-fadeIn">
       {/* Top Header Banner */}
-      <div className="relative rounded-3xl bg-gradient-to-r from-[#141a2c] via-[#1a2238] to-[#121626] p-6 sm:p-10 border border-white/[0.1] shadow-2xl overflow-hidden">
+      <div className="relative rounded-3xl bg-gradient-to-r from-[#091124] via-[#0d1734] to-[#060b18] p-6 sm:p-10 border border-cyan-500/20 shadow-2xl overflow-hidden">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>LIVE PRODUCT CATALOG</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-['Outfit'] tracking-tight">
             Discover Premium{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
-              Gadgets & Goods
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400">
+              Gadgets &amp; Goods
             </span>
           </h1>
 
@@ -131,7 +131,7 @@ export default function ProductsPage({
           {/* Debounced Search Bar */}
           <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-              <Search className="w-4 h-4 text-orange-400" />
+              <Search className="w-4 h-4 text-cyan-400" />
             </div>
 
             <input
@@ -139,13 +139,13 @@ export default function ProductsPage({
               value={searchQuery}
               onChange={handleSearchChange}
               placeholder="Search by product name, brand, or model..."
-              className="w-full pl-10 pr-24 py-3 rounded-2xl bg-[#121829] border border-white/[0.1] focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-sm text-white placeholder-slate-400 outline-none transition shadow-inner"
+              className="w-full pl-10 pr-24 py-3 rounded-2xl bg-[#090e1c] border border-white/[0.1] focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm text-white placeholder-slate-400 outline-none transition shadow-inner"
             />
 
             {/* Debounce / Loading Status Indicator inside search input */}
             <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center">
               {isDebouncing ? (
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-orange-500/15 border border-orange-500/30 text-orange-400 text-[10px] font-mono">
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-[10px] font-mono">
                   <Loader2 className="w-3 h-3 animate-spin" />
                   <span>Debouncing...</span>
                 </div>
@@ -165,7 +165,7 @@ export default function ProductsPage({
           <div className="flex items-center gap-2">
             <div className="relative shrink-0">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <SlidersHorizontal className="w-3.5 h-3.5" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
               </div>
               <select
                 value={sortBy}
@@ -173,13 +173,13 @@ export default function ProductsPage({
                   setSortBy(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="pl-9 pr-8 py-3 rounded-2xl bg-[#121829] border border-white/[0.1] text-xs font-semibold text-slate-200 outline-none hover:border-orange-500/40 transition cursor-pointer appearance-none shadow-sm"
+                className="pl-9 pr-8 py-3 rounded-2xl bg-[#090e1c] border border-white/[0.1] text-xs font-semibold text-slate-200 outline-none hover:border-cyan-500/40 transition cursor-pointer appearance-none shadow-sm"
               >
-                <option value="default" className="bg-[#121829] text-white">Featured Sort</option>
-                <option value="price-asc" className="bg-[#121829] text-white">Price: Low to High</option>
-                <option value="price-desc" className="bg-[#121829] text-white">Price: High to Low</option>
-                <option value="rating-desc" className="bg-[#121829] text-white">Highest Rated</option>
-                <option value="title-asc" className="bg-[#121829] text-white">Alphabetical (A-Z)</option>
+                <option value="default" className="bg-[#090e1c] text-white">Featured Sort</option>
+                <option value="price-asc" className="bg-[#090e1c] text-white">Price: Low to High</option>
+                <option value="price-desc" className="bg-[#090e1c] text-white">Price: High to Low</option>
+                <option value="rating-desc" className="bg-[#090e1c] text-white">Highest Rated</option>
+                <option value="title-asc" className="bg-[#090e1c] text-white">Alphabetical (A-Z)</option>
               </select>
             </div>
 
@@ -208,8 +208,8 @@ export default function ProductsPage({
                 onClick={() => handleCategoryChange(cat.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 ${
                   isActive
-                    ? "bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white shadow-lg shadow-orange-950/50"
-                    : "bg-[#121829] hover:bg-white/[0.08] text-slate-300 border border-white/[0.08]"
+                    ? "bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-lg shadow-cyan-950/50"
+                    : "bg-[#090e1c] hover:bg-white/[0.08] text-slate-300 border border-white/[0.08]"
                 }`}
               >
                 {cat.label}
@@ -224,7 +224,7 @@ export default function ProductsPage({
             Showing <strong className="text-white font-mono">{products.length}</strong> of{" "}
             <strong className="text-white font-mono">{total}</strong> items
             {selectedCategory !== "all" && (
-              <span> in <strong className="text-orange-400 capitalize">{selectedCategory}</strong></span>
+              <span> in <strong className="text-cyan-400 capitalize">{selectedCategory}</strong></span>
             )}
             {debouncedSearchQuery && (
               <span> matching &quot;<strong className="text-white">{debouncedSearchQuery}</strong>&quot;</span>
@@ -243,7 +243,7 @@ export default function ProductsPage({
           {[...Array(itemsPerPage)].map((_, idx) => (
             <div
               key={idx}
-              className="rounded-2xl bg-[#121829] border border-white/[0.06] p-3 sm:p-4 space-y-3 animate-pulse"
+              className="rounded-2xl bg-[#090e1c] border border-white/[0.06] p-3 sm:p-4 space-y-3 animate-pulse"
             >
               <div className="aspect-[4/3] rounded-xl bg-white/[0.04]" />
               <div className="h-4 bg-white/[0.06] rounded w-3/4" />
@@ -253,7 +253,7 @@ export default function ProductsPage({
           ))}
         </div>
       ) : error ? (
-        <div className="rounded-3xl bg-[#151a2c] border border-rose-500/30 p-8 sm:p-12 text-center max-w-lg mx-auto space-y-4 shadow-2xl">
+        <div className="rounded-3xl bg-[#0d1424] border border-rose-500/30 p-8 sm:p-12 text-center max-w-lg mx-auto space-y-4 shadow-2xl">
           <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mx-auto">
             <AlertTriangle className="w-7 h-7" />
           </div>
@@ -268,9 +268,9 @@ export default function ProductsPage({
           </button>
         </div>
       ) : products.length === 0 ? (
-        <div className="rounded-3xl bg-[#121829] border border-white/[0.08] p-10 sm:p-16 text-center max-w-md mx-auto space-y-4 shadow-xl">
+        <div className="rounded-3xl bg-[#090e1c] border border-white/[0.08] p-10 sm:p-16 text-center max-w-md mx-auto space-y-4 shadow-xl">
           <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center mx-auto text-slate-400">
-            <PackageSearch className="w-8 h-8 text-orange-400" />
+            <PackageSearch className="w-8 h-8 text-cyan-400" />
           </div>
           <h3 className="text-lg font-bold text-white font-['Outfit']">No products found</h3>
           <p className="text-xs text-slate-400 leading-relaxed">
@@ -279,7 +279,7 @@ export default function ProductsPage({
           <button
             type="button"
             onClick={handleResetFilters}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg transition cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-bold shadow-lg transition cursor-pointer"
           >
             Reset Filters
           </button>
@@ -309,7 +309,7 @@ export default function ProductsPage({
               setCurrentPage((prev) => Math.max(1, prev - 1));
               window.scrollTo({ top: 180, behavior: "smooth" });
             }}
-            className="p-2.5 rounded-xl bg-[#121829] border border-white/[0.1] text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+            className="p-2.5 rounded-xl bg-[#090e1c] border border-white/[0.1] text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
             aria-label="Previous page"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -318,7 +318,6 @@ export default function ProductsPage({
           <div className="flex items-center gap-1.5">
             {[...Array(totalPages)].map((_, i) => {
               const pageNum = i + 1;
-              // Show first, last, and near current
               if (
                 pageNum === 1 ||
                 pageNum === totalPages ||
@@ -334,8 +333,8 @@ export default function ProductsPage({
                     }}
                     className={`w-9 h-9 rounded-xl text-xs font-bold font-mono transition cursor-pointer ${
                       currentPage === pageNum
-                        ? "bg-gradient-to-r from-[#df5d2c] to-[#ff7849] text-white shadow-lg"
-                        : "bg-[#121829] text-slate-400 hover:text-white border border-white/[0.08]"
+                        ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg"
+                        : "bg-[#090e1c] text-slate-400 hover:text-white border border-white/[0.08]"
                     }`}
                   >
                     {pageNum}
@@ -356,7 +355,7 @@ export default function ProductsPage({
               setCurrentPage((prev) => Math.min(totalPages, prev + 1));
               window.scrollTo({ top: 180, behavior: "smooth" });
             }}
-            className="p-2.5 rounded-xl bg-[#121829] border border-white/[0.1] text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+            className="p-2.5 rounded-xl bg-[#090e1c] border border-white/[0.1] text-slate-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
             aria-label="Next page"
           >
             <ChevronRight className="w-4 h-4" />

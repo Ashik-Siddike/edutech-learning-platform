@@ -93,11 +93,11 @@ export default function CartDrawer({
 
       {/* Slide-over container */}
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
-        <div className="w-screen max-w-full sm:max-w-md bg-[#0e1424] border-l border-white/[0.1] shadow-2xl flex flex-col h-full h-[100dvh]">
+        <div className="w-screen max-w-full sm:max-w-md bg-[#060a16] border-l border-white/[0.1] shadow-2xl flex flex-col h-full h-[100dvh]">
           {/* Header */}
-          <div className="p-4 sm:p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#111728] shrink-0">
+          <div className="p-4 sm:p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#080d1c] shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-orange-500/15 text-orange-400 border border-orange-500/30 flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 flex items-center justify-center shrink-0">
                 <ShoppingBag className="w-5 h-5" />
               </div>
               <div>
@@ -122,21 +122,21 @@ export default function CartDrawer({
 
           {/* Free Shipping Progress Indicator */}
           {cart.length > 0 && (
-            <div className="px-5 py-3 bg-[#131a2e] border-b border-white/[0.06] text-xs">
+            <div className="px-5 py-3 bg-[#090f20] border-b border-white/[0.06] text-xs">
               <div className="flex items-center justify-between mb-1.5 font-medium">
                 <span className="flex items-center gap-1.5 text-slate-300">
-                  <Truck className="w-3.5 h-3.5 text-orange-400" />
+                  <Truck className="w-3.5 h-3.5 text-cyan-400" />
                   {amountNeededForFreeShipping === 0 ? (
                     <span className="text-emerald-400 font-bold">🎉 FREE Express Delivery Unlocked!</span>
                   ) : (
-                    <span>Add <strong className="text-orange-400 font-mono">৳{amountNeededForFreeShipping.toLocaleString()}</strong> for Free Delivery</span>
+                    <span>Add <strong className="text-cyan-400 font-mono">৳{amountNeededForFreeShipping.toLocaleString()}</strong> for Free Delivery</span>
                   )}
                 </span>
                 <span className="text-[11px] font-mono text-slate-400 font-semibold">{Math.round(freeShippingProgress)}%</span>
               </div>
               <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#df5d2c] to-[#00f2fe] rounded-full transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full transition-all duration-300"
                   style={{ width: `${freeShippingProgress}%` }}
                 />
               </div>
@@ -148,7 +148,7 @@ export default function CartDrawer({
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12 px-4">
                 <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center mb-4 text-slate-400 shadow-inner">
-                  <ShoppingBag className="w-8 h-8 text-orange-400/60" />
+                  <ShoppingBag className="w-8 h-8 text-cyan-400/60" />
                 </div>
                 <h3 className="text-base font-bold text-white font-['Outfit'] mb-1">
                   Your cart is empty
@@ -162,7 +162,7 @@ export default function CartDrawer({
                     onClose();
                     if (onExploreCourses) onExploreCourses();
                   }}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] hover:opacity-95 text-white text-xs font-bold shadow-lg transition active:scale-95 cursor-pointer flex items-center gap-2"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-cyan-950/50 transition active:scale-95 cursor-pointer flex items-center gap-2"
                 >
                   <span>Browse Store Catalog</span>
                   <ArrowRight className="w-4 h-4" />
@@ -179,10 +179,10 @@ export default function CartDrawer({
                 return (
                   <div
                     key={item.id}
-                    className="p-3.5 rounded-2xl bg-[#13192c] border border-white/[0.08] hover:border-orange-500/30 flex gap-3.5 transition-all shadow-sm"
+                    className="p-3.5 rounded-2xl bg-[#090e1c] border border-white/[0.08] hover:border-cyan-500/30 flex gap-3.5 transition-all shadow-sm"
                   >
                     {/* Item Thumbnail */}
-                    <div className="w-16 h-16 rounded-xl bg-[#090d18] border border-white/10 flex items-center justify-center overflow-hidden shrink-0 p-1">
+                    <div className="w-16 h-16 rounded-xl bg-[#030610] border border-white/10 flex items-center justify-center overflow-hidden shrink-0 p-1">
                       <img
                         src={itemImg}
                         alt={item.title}
@@ -216,7 +216,7 @@ export default function CartDrawer({
                       </div>
 
                       <div className="flex items-baseline justify-between pt-1">
-                        <span className="text-xs font-extrabold text-orange-400 font-mono">
+                        <span className="text-xs font-extrabold text-cyan-400 font-mono">
                           ৳{Number(item.price || 0).toLocaleString()}
                         </span>
                         {item.originalPrice && Number(item.originalPrice) > Number(item.price) && (
@@ -234,7 +234,7 @@ export default function CartDrawer({
 
           {/* Footer & Checkout Area */}
           {cart.length > 0 && (
-            <div className="p-4 sm:p-5 border-t border-white/[0.08] bg-[#111728] space-y-4 shrink-0 shadow-2xl">
+            <div className="p-4 sm:p-5 border-t border-white/[0.08] bg-[#080d1c] space-y-4 shrink-0 shadow-2xl">
               {/* Promo Coupon Module */}
               <div className="space-y-2">
                 {appliedCoupon ? (
@@ -266,12 +266,12 @@ export default function CartDrawer({
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                         placeholder="Promo code (e.g. STORE20)"
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#090d18] border border-white/10 focus:border-orange-500 text-xs text-white placeholder-slate-500 uppercase font-mono tracking-wider outline-none"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-[#030610] border border-white/10 focus:border-cyan-400 text-xs text-white placeholder-slate-500 uppercase font-mono tracking-wider outline-none"
                       />
                     </div>
                     <button
                       type="submit"
-                      className="px-4 py-2.5 rounded-xl bg-white/[0.08] hover:bg-orange-600 text-white text-xs font-bold transition cursor-pointer shrink-0"
+                      className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition cursor-pointer shrink-0"
                     >
                       Apply
                     </button>
@@ -288,27 +288,27 @@ export default function CartDrawer({
                     <button
                       type="button"
                       onClick={() => setShowAvailableCoupons((prev) => !prev)}
-                      className="text-[11px] text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1 cursor-pointer"
+                      className="text-[11px] text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 cursor-pointer"
                     >
                       <Sparkles className="w-3 h-3" />
                       <span>{showAvailableCoupons ? "Hide available vouchers" : "View available vouchers"}</span>
                     </button>
 
                     {showAvailableCoupons && (
-                      <div className="mt-2 space-y-1.5 max-h-36 overflow-y-auto p-1 bg-black/20 rounded-xl">
+                      <div className="mt-2 space-y-1.5 max-h-36 overflow-y-auto p-1 bg-black/30 rounded-xl">
                         {availableCoupons.map((c) => (
                           <div
                             key={c.code}
                             className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-between text-xs"
                           >
                             <div>
-                              <span className="font-mono font-bold text-orange-400 text-[11px]">{c.code}</span>
+                              <span className="font-mono font-bold text-cyan-400 text-[11px]">{c.code}</span>
                               <span className="text-[10px] text-slate-400 block line-clamp-1">{c.description}</span>
                             </div>
                             <button
                               type="button"
                               onClick={() => handleQuickApply(c.code)}
-                              className="px-2.5 py-1 rounded-md bg-orange-500/20 text-orange-300 text-[10px] font-bold hover:bg-orange-500/30 transition cursor-pointer"
+                              className="px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-bold hover:bg-cyan-500/30 transition cursor-pointer"
                             >
                               Apply
                             </button>
@@ -343,7 +343,7 @@ export default function CartDrawer({
 
                 <div className="flex justify-between items-baseline pt-2 border-t border-white/[0.08]">
                   <span className="text-sm font-bold text-white font-['Outfit']">Grand Total</span>
-                  <span className="text-lg font-black text-orange-400 font-mono">
+                  <span className="text-lg font-black text-cyan-400 font-mono">
                     ৳{finalGrandTotal.toLocaleString()}
                   </span>
                 </div>
@@ -354,7 +354,7 @@ export default function CartDrawer({
                 <button
                   type="button"
                   onClick={onCheckout}
-                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] hover:opacity-95 text-white text-xs font-bold shadow-xl shadow-orange-950/50 flex items-center justify-center gap-2 transition cursor-pointer active:scale-98"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold shadow-xl shadow-cyan-950/60 flex items-center justify-center gap-2 transition cursor-pointer active:scale-98"
                 >
                   <span>Proceed to Secure Checkout</span>
                   <ArrowRight className="w-4 h-4" />

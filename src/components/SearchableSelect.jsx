@@ -137,7 +137,7 @@ export default function SearchableSelect({
           {selectedArray.map((item, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#6e3333] text-orange-200 text-xs rounded border border-orange-900/50"
+              className="inline-flex items-center gap-1 px-2 py-0.5 bg-cyan-500/15 text-cyan-200 text-xs rounded-lg border border-cyan-500/30"
             >
               <span>{item}</span>
               <button
@@ -146,7 +146,7 @@ export default function SearchableSelect({
                   e.stopPropagation();
                   handleRemoveItem(item);
                 }}
-                className="text-orange-300 hover:text-white font-bold text-xs"
+                className="text-cyan-300 hover:text-white font-bold text-xs"
               >
                 &times;
               </button>
@@ -163,10 +163,10 @@ export default function SearchableSelect({
           onFocus={() => setIsOpen(true)}
           placeholder={isMulti && selectedArray.length > 0 ? "Add more..." : placeholder}
           autoComplete="off"
-          className={`w-full bg-transparent border-b pb-1 pr-6 text-sm text-white placeholder-gray-500 outline-none transition ${
+          className={`w-full bg-transparent border-b pb-1 pr-6 text-sm text-white placeholder-slate-500 outline-none transition ${
             error
               ? "border-red-400"
-              : "border-gray-500 focus:border-orange-400"
+              : "border-white/20 focus:border-cyan-400"
           }`}
         />
 
@@ -174,7 +174,7 @@ export default function SearchableSelect({
           type="button"
           tabIndex={-1}
           onClick={() => setIsOpen((prev) => !prev)}
-          className="absolute right-0 top-1 text-gray-400 hover:text-white transition-transform duration-200"
+          className="absolute right-0 top-1 text-slate-400 hover:text-white transition-transform duration-200"
         >
           <svg
             className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
@@ -192,7 +192,7 @@ export default function SearchableSelect({
       )}
 
       {isOpen && (
-        <ul className="absolute z-50 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-[#191b24] border border-gray-700 rounded-lg shadow-2xl py-1 text-xs">
+        <ul className="absolute z-50 left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-[#070b14] border border-white/10 rounded-xl shadow-2xl py-1 text-xs">
           {filteredOptions.length > 0 ? (
             filteredOptions.map((opt, index) => {
               const val = typeof opt === "string" ? opt : opt.value;
@@ -207,8 +207,8 @@ export default function SearchableSelect({
                   onClick={() => handleSelect(opt)}
                   className={`px-3 py-2 cursor-pointer transition flex items-center justify-between ${
                     isSelected
-                      ? "bg-[#6e3333] text-white font-medium"
-                      : "text-gray-300 hover:bg-[#6e3333]/50 hover:text-white"
+                      ? "bg-cyan-500/20 text-white font-medium"
+                      : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
                 >
                   <span className="flex items-center gap-2">
@@ -216,8 +216,8 @@ export default function SearchableSelect({
                       <span
                         className={`w-3.5 h-3.5 rounded border flex items-center justify-center ${
                           isSelected
-                            ? "bg-orange-500 border-orange-400 text-white font-bold"
-                            : "border-gray-500 bg-transparent text-transparent"
+                            ? "bg-cyan-500 border-cyan-400 text-white font-bold"
+                            : "border-white/20 bg-transparent text-transparent"
                         }`}
                       >
                         {isSelected && (
@@ -231,7 +231,7 @@ export default function SearchableSelect({
                   </span>
 
                   {!isMulti && isSelected && (
-                    <svg className="w-3.5 h-3.5 text-orange-300" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-3.5 h-3.5 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   )}

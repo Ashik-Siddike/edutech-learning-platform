@@ -1,24 +1,11 @@
 import { useState } from "react";
-import {
-  Headphones,
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  MessageSquare,
-  HelpCircle,
-  ChevronDown,
-  ShieldCheck,
-  Truck,
-  RotateCcw,
-  Sparkles,
-} from "lucide-react";
+import { Headphones, Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from "lucide-react";
 
 export default function ContactPage({ onShowToast }) {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
+    email: "",
     subject: "Order Inquiry",
     message: "",
   });
@@ -28,24 +15,24 @@ export default function ContactPage({ onShowToast }) {
 
   const faqs = [
     {
-      q: "What is your standard delivery timeframe in Bangladesh?",
-      a: "Orders inside Dhaka metropolitan city are delivered within 24 to 36 hours. For all other districts across Bangladesh, delivery takes 48 to 72 hours via our authorized courier partners (Steadfast & Pathao Courier).",
+      q: "How does nationwide express delivery work?",
+      a: "Inside Dhaka Metro, deliveries are completed within 24 hours. For all other 63 districts across Bangladesh, orders are dispatched via Steadfast/Pathao Courier within 48 to 72 hours.",
     },
     {
-      q: "Are all electronics and lifestyle products 100% genuine?",
-      a: "Yes! Every single product listed in Suffex Store is sourced directly from verified manufacturer distributors and official brand importers. All devices come with standard 1-year brand warranty and official serial registration.",
+      q: "Are the products 100% original and authentic?",
+      a: "Yes, every single product sold on Suffex Store is sourced directly from certified authorized global brand distributors and backed by official manufacturer warranties.",
     },
     {
-      q: "How can I apply discount coupon codes during checkout?",
-      a: "You can enter your promo code (e.g. STORE20, SUFFEX500, or TECH15) directly in the Shopping Cart drawer or during Checkout. Once applied, your discount will be instantly deducted from your subtotal.",
+      q: "Can I pay using bKash, Nagad, or Cash on Delivery?",
+      a: "Absolutely! We accept Cash on Delivery nationwide, as well as instant bKash, Nagad, Rocket merchant gateways and major Visa/Mastercard credit/debit cards.",
     },
     {
-      q: "What payment options do you support?",
-      a: "We support Cash on Delivery (COD) across Bangladesh, instant Mobile Financial Services (bKash, Nagad, Rocket), and secure Visa / MasterCard debit & credit card transactions with SSLCommerz encryption.",
+      q: "How can I apply promo discount vouchers?",
+      a: "Open your shopping cart drawer or proceed to checkout, enter any active promo code like SAVE500, TECH10, or CYBER300 and click Apply to enjoy immediate bill discounts.",
     },
     {
-      q: "What is your return and replacement policy?",
-      a: "We provide an unconditional 7-day replacement guarantee if you receive a product with any technical malfunction or transit damage. Simply contact our hotline or initiate a request with your order ID.",
+      q: "What is your replacement and return policy?",
+      a: "We offer a 7-day hassle-free replacement guarantee if the product arrives with manufacturing defects or physical transit damage. Just reach out to our support line.",
     },
   ];
 
@@ -53,14 +40,12 @@ export default function ContactPage({ onShowToast }) {
     e.preventDefault();
     setSubmitted(true);
     if (onShowToast) {
-      onShowToast(
-        `Thank you, ${formData.name}! Your inquiry has been dispatched to our VIP Care Team.`
-      );
+      onShowToast("Your inquiry has been submitted! Our team will reach you shortly.");
     }
     setFormData({
       name: "",
-      email: "",
       phone: "",
+      email: "",
       subject: "Order Inquiry",
       message: "",
     });
@@ -68,23 +53,25 @@ export default function ContactPage({ onShowToast }) {
   };
 
   return (
-    <div className="w-full text-slate-100 animate-fadeIn pb-24 font-sans">
+    <div className="w-full text-slate-100 animate-fadeIn pb-24 font-sans bg-[#030712]">
       {/* Header Banner */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#141a2c] via-[#1a2238] to-[#121626] border-b border-white/[0.08] py-16 text-center px-4">
-        <div className="max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-semibold">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#080e1e] via-[#050914] to-[#030712] border-b border-white/[0.08] py-16 text-center px-4">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-cyan-500/10 blur-[100px] pointer-events-none" />
+
+        <div className="max-w-3xl mx-auto space-y-4 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-xs font-semibold">
             <Headphones className="w-3.5 h-3.5" />
             <span>24/7 CUSTOMER CARE & SUPPORT</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-white font-['Outfit'] tracking-tight">
             How Can We{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] via-[#ff7849] to-[#00f2fe]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400">
               Help You Today?
             </span>
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
             Need help tracking a shipment, inquiring about product availability, or claiming warranty? Our dedicated customer team is ready to assist you.
           </p>
         </div>
@@ -94,34 +81,34 @@ export default function ContactPage({ onShowToast }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 space-y-16">
         {/* Contact Channels Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-          <div className="p-6 rounded-3xl bg-[#12182a] border border-white/[0.08] hover:border-orange-500/30 transition shadow-xl space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center">
+          <div className="p-6 rounded-3xl bg-[#070b14] border border-white/[0.08] hover:border-cyan-500/30 transition shadow-xl space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center">
               <Phone className="w-6 h-6" />
             </div>
             <h3 className="text-base font-bold text-white font-['Outfit']">Official Phone Hotline</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Available 7 days a week, 9:00 AM to 10:00 PM for instant order assistance.
             </p>
-            <span className="font-mono text-sm font-bold text-orange-400 block pt-1">
+            <span className="font-mono text-sm font-bold text-cyan-400 block pt-1">
               +880 1800-SUFFEX (783339)
             </span>
           </div>
 
-          <div className="p-6 rounded-3xl bg-[#12182a] border border-white/[0.08] hover:border-cyan-500/30 transition shadow-xl space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+          <div className="p-6 rounded-3xl bg-[#070b14] border border-white/[0.08] hover:border-indigo-500/30 transition shadow-xl space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
               <Mail className="w-6 h-6" />
             </div>
             <h3 className="text-base font-bold text-white font-['Outfit']">Email Support Desk</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Send us corporate orders, warranty inquiries, or partner proposals.
             </p>
-            <span className="font-mono text-sm font-bold text-cyan-400 block pt-1">
+            <span className="font-mono text-sm font-bold text-indigo-400 block pt-1">
               support@suffexstore.com
             </span>
           </div>
 
-          <div className="p-6 rounded-3xl bg-[#12182a] border border-white/[0.08] hover:border-emerald-500/30 transition shadow-xl space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+          <div className="p-6 rounded-3xl bg-[#070b14] border border-white/[0.08] hover:border-emerald-500/30 transition shadow-xl space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
               <MapPin className="w-6 h-6" />
             </div>
             <h3 className="text-base font-bold text-white font-['Outfit']">Flagship Experience Hub</h3>
@@ -137,7 +124,7 @@ export default function ContactPage({ onShowToast }) {
         {/* 2-Column: Inquiry Form & Interactive FAQ */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Left Column: Form */}
-          <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-[#12182a] border border-white/[0.08] shadow-2xl space-y-5">
+          <div className="lg:col-span-6 p-6 sm:p-8 rounded-3xl bg-[#070b14] border border-white/[0.08] shadow-2xl space-y-5">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-white font-['Outfit']">
                 Send Us a Quick Message
@@ -157,7 +144,7 @@ export default function ContactPage({ onShowToast }) {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Tanvir Ahmed"
-                    className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition"
+                    className="w-full px-4 py-3 rounded-xl bg-[#030712] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none transition"
                   />
                 </div>
 
@@ -169,7 +156,7 @@ export default function ContactPage({ onShowToast }) {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="017XXXXXXXX"
-                    className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition"
+                    className="w-full px-4 py-3 rounded-xl bg-[#030712] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none transition"
                   />
                 </div>
               </div>
@@ -182,7 +169,7 @@ export default function ContactPage({ onShowToast }) {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="tanvir@example.com"
-                  className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition"
+                  className="w-full px-4 py-3 rounded-xl bg-[#030712] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none transition"
                 />
               </div>
 
@@ -191,7 +178,7 @@ export default function ContactPage({ onShowToast }) {
                 <select
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white focus:border-orange-500 outline-none transition cursor-pointer"
+                  className="w-full px-4 py-3 rounded-xl bg-[#030712] border border-white/10 text-xs text-white focus:border-cyan-500 outline-none transition cursor-pointer"
                 >
                   <option value="Order Inquiry">Order Status & Delivery Tracking</option>
                   <option value="Warranty Claim">Warranty Claim & Technical Support</option>
@@ -209,13 +196,13 @@ export default function ContactPage({ onShowToast }) {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Describe your inquiry or include your Order ID..."
-                  className="w-full px-4 py-3 rounded-xl bg-[#090d18] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-orange-500 outline-none transition resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-[#030712] border border-white/10 text-xs text-white placeholder-slate-500 focus:border-cyan-500 outline-none transition resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#b0401d] via-[#df5d2c] to-[#ff7849] text-white text-xs font-bold shadow-lg shadow-orange-950/40 hover:opacity-95 transition cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 text-white text-xs font-bold shadow-lg shadow-cyan-500/25 hover:brightness-110 transition cursor-pointer flex items-center justify-center gap-2"
               >
                 <Send className="w-4 h-4" />
                 <span>Submit Inquiry</span>
@@ -226,7 +213,7 @@ export default function ContactPage({ onShowToast }) {
           {/* Right Column: FAQ Accordion */}
           <div className="lg:col-span-6 space-y-4">
             <div className="space-y-1 mb-2">
-              <span className="text-xs font-bold text-orange-400 uppercase tracking-wider font-['Outfit']">
+              <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider font-['Outfit']">
                 FREQUENTLY ASKED QUESTIONS
               </span>
               <h2 className="text-2xl font-bold text-white font-['Outfit']">
@@ -240,16 +227,16 @@ export default function ContactPage({ onShowToast }) {
                 return (
                   <div
                     key={idx}
-                    className="rounded-2xl bg-[#12182a] border border-white/[0.08] overflow-hidden transition-all duration-200"
+                    className="rounded-2xl bg-[#070b14] border border-white/[0.08] hover:border-cyan-500/20 overflow-hidden transition-all duration-200"
                   >
                     <button
                       type="button"
                       onClick={() => setOpenFaq(isOpen ? -1 : idx)}
-                      className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold text-white hover:text-orange-400 transition cursor-pointer"
+                      className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold text-white hover:text-cyan-400 transition cursor-pointer"
                     >
                       <span className="font-['Outfit']">{faq.q}</span>
                       <ChevronDown
-                        className={`w-4 h-4 text-orange-400 shrink-0 transition-transform duration-200 ${
+                        className={`w-4 h-4 text-cyan-400 shrink-0 transition-transform duration-200 ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />
