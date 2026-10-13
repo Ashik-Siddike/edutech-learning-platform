@@ -123,7 +123,7 @@ export default function CartDrawer({
                   Your cart is empty
                 </h3>
                 <p className="text-xs text-gray-400 max-w-xs mb-6 leading-relaxed">
-                  Explore our industry-ready tech courses and store products to add them to your cart.
+                  Explore our authentic gadgets, tech gear, and store products to add them to your cart.
                 </p>
                 <button
                   type="button"
@@ -133,7 +133,7 @@ export default function CartDrawer({
                   }}
                   className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#b0401d] to-[#df5d2c] hover:opacity-95 text-white text-xs font-semibold shadow-lg transition active:scale-95 cursor-pointer"
                 >
-                  Browse Courses
+                  Browse Store Products
                 </button>
               </div>
             ) : (

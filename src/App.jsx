@@ -1,26 +1,25 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import HomePage from "./components/HomePage";
-import CoursesPage from "./components/CoursesPage";
 import ProductsPage from "./components/ProductsPage";
 import ContactPage from "./components/ContactPage";
-import ReactHookForm from "./components/ReactHookForm";
 import CartDrawer from "./components/CartDrawer";
 import CheckoutPage from "./components/CheckoutPage";
-import StudentDashboard from "./components/StudentDashboard";
-import CourseDetailsPage from "./components/CourseDetailsPage";
+import MyOrdersPage from "./components/MyOrdersPage";
 import Footer from "./components/Footer";
 
 export default function App() {
-  // Navigation state: "home" | "courses" | "products" | "dashboard" | "course-details" | "contact" | "form" | "checkout"
+  // Navigation state: "home" | "products" | "orders" | "contact" | "checkout"
   const [activeTab, setActiveTab] = useState("home");
-  const [prefilledCourse, setPrefilledCourse] = useState("");
-  const [selectedCourseId, setSelectedCourseId] = useState(2);
 
   // Persisted shopping cart state
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
 
   // Persisted applied coupon state
@@ -44,32 +43,29 @@ export default function App() {
     }, 3200);
   };
 
-  // Switch tabs and optionally prefill course selection / id
-  const handleNavigation = (tab, courseParam = "") => {
-    if (tab === "course-details" && courseParam) {
-      setSelectedCourseId(courseParam);
-    } else if (courseParam) {
-      setPrefilledCourse(courseParam);
-    }
+  // Switch tabs
+  const handleNavigation = (tab) => {
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Add course to cart and sync with localStorage
-  const addToCart = (course) => {
-    const exists = cart.some((c) => c.id === course.id);
+  // Add item to cart and sync with localStorage
+  const addToCart = (product) => {
+    const exists = cart.some((c) => c.id === product.id);
     if (!exists) {
-      const updated = [...cart, course];
+      const updated = [...cart, product];
       setCart(updated);
       localStorage.setItem("cart", JSON.stringify(updated));
-      showToast(`Added "${course.title}" to cart!`);
+      showToast(`Added "${product.title}" to cart!`);
+    } else {
+      showToast(`"${product.title}" is already in your cart.`);
     }
   };
 
-  // Remove specific course from cart
-  const removeFromCart = (courseId) => {
-    const removedItem = cart.find((c) => c.id === courseId);
-    const updated = cart.filter((c) => c.id !== courseId);
+  // Remove specific item from cart
+  const removeFromCart = (productId) => {
+    const removedItem = cart.find((c) => c.id === productId);
+    const updated = cart.filter((c) => c.id !== productId);
     setCart(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
     showToast(
@@ -144,16 +140,6 @@ export default function App() {
           />
         )}
 
-        {activeTab === "courses" && (
-          <CoursesPage
-            onNavigateToForm={(courseTitle) => handleNavigation("form", courseTitle)}
-            onViewCourseDetails={(courseId) => handleNavigation("course-details", courseId)}
-            cart={cart}
-            onAddToCart={addToCart}
-            onRemoveFromCart={removeFromCart}
-          />
-        )}
-
         {activeTab === "products" && (
           <ProductsPage
             cart={cart}
@@ -162,33 +148,12 @@ export default function App() {
           />
         )}
 
-        {activeTab === "dashboard" && (
-          <StudentDashboard
-            onNavigate={handleNavigation}
-            onSelectCourse={(id) => handleNavigation("course-details", id)}
-          />
-        )}
-
-        {activeTab === "course-details" && (
-          <CourseDetailsPage
-            courseId={selectedCourseId}
-            cart={cart}
-            onAddToCart={addToCart}
-            onRemoveFromCart={removeFromCart}
-            onNavigate={handleNavigation}
-          />
+        {activeTab === "orders" && (
+          <MyOrdersPage onNavigate={handleNavigation} />
         )}
 
         {activeTab === "contact" && (
           <ContactPage onShowToast={showToast} />
-        )}
-
-        {activeTab === "form" && (
-          <div className="min-h-[calc(100vh-64px)] bg-[#949ca5] text-white flex items-center justify-center p-4 md:p-8">
-            <div className="w-full flex justify-center">
-              <ReactHookForm initialCourse={prefilledCourse} />
-            </div>
-          </div>
         )}
 
         {activeTab === "checkout" && (
@@ -217,7 +182,7 @@ export default function App() {
         onClearCart={clearCart}
         onCheckout={handleCheckout}
         onExploreCourses={() => {
-          handleNavigation("courses");
+          handleNavigation("products");
           setIsCartOpen(false);
         }}
         appliedCoupon={appliedCoupon}

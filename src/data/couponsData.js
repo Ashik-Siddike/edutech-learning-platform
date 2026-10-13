@@ -1,43 +1,47 @@
-// Master coupons data and business validation logic
+// Master coupons data and business validation logic for E-Commerce Store
 export const availableCoupons = [
   {
-    code: "EDUTECH20",
+    code: "STORE20",
+    aliases: ["EDUTECH20"],
     type: "percentage",
     value: 20, // 20% discount
     maxDiscount: 2000, // Up to 2,000 BDT
     minOrderAmount: 1000,
     badge: "Most Popular",
-    description: "20% Instant Discount on All Tracks & Store Items (Max ৳2,000)",
+    description: "20% Instant Discount on All Store Products (Max ৳2,000)",
     expiryDate: "2026-12-31",
   },
   {
     code: "SUFFEX500",
+    aliases: [],
     type: "flat",
     value: 500, // 500 BDT flat discount
     maxDiscount: 500,
     minOrderAmount: 2500,
     badge: "Flat Bonus",
-    description: "Flat ৳500 Student Bonus on purchases of ৳2,500 or more",
+    description: "Flat ৳500 Shopping Bonus on orders of ৳2,500 or more",
     expiryDate: "2026-12-31",
   },
   {
-    code: "DEVPRO15",
+    code: "TECH15",
+    aliases: ["DEVPRO15"],
     type: "percentage",
     value: 15,
     maxDiscount: 1500,
     minOrderAmount: 1500,
-    badge: "Tech Track",
-    description: "15% off for aspiring Full Stack & Frontend Engineers",
+    badge: "Electronics",
+    description: "15% off on Tech Gadgets, Laptops & Smartphones",
     expiryDate: "2026-12-31",
   },
   {
     code: "WELCOME10",
+    aliases: [],
     type: "percentage",
     value: 10,
     maxDiscount: 1000,
     minOrderAmount: 0, // No minimum order
-    badge: "New Student",
-    description: "10% Welcome Discount with No Minimum Cart Limit",
+    badge: "New Shopper",
+    description: "10% Welcome Discount on First Order (No minimum)",
     expiryDate: "2026-12-31",
   },
 ];
@@ -52,13 +56,15 @@ export function validateAndCalculateCoupon(inputCode, subtotal) {
   }
 
   const normalized = inputCode.trim().toUpperCase();
-  const coupon = availableCoupons.find((c) => c.code === normalized);
+  const coupon = availableCoupons.find(
+    (c) => c.code === normalized || (c.aliases && c.aliases.includes(normalized))
+  );
 
   if (!coupon) {
     return {
       isValid: false,
       discount: 0,
-      message: `Invalid coupon "${normalized}". Try "EDUTECH20" or "SUFFEX500".`,
+      message: `Invalid coupon "${normalized}". Try "STORE20" or "SUFFEX500".`,
     };
   }
 

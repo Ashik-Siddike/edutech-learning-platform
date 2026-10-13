@@ -1,18 +1,4 @@
-/**
- * Price Calculator Engine using JavaScript Closure
- * 
- * Demonstrates a classic Closure Architecture:
- * The outer function `createPriceCalculator` creates an environment with configuration
- * settings (`vatRate`, `exchangeRate`, `currencySymbol`, etc.).
- * 
- * The inner function `calculatePrice` retains access to those outer variables across
- * multiple calculations without re-declaring or exposing them to global scope.
- * 
- * @param {Object} config - Configuration options
- * @param {number} config.vatRate - VAT/Tax percentage as a decimal (e.g., 0.05 for 5%)
- * @param {number} config.exchangeRate - BDT per USD exchange rate (default: 120)
- * @returns {Function} - Inner closure function `(product, quantity, couponDiscountPercent) => PriceDetails`
- */
+
 export function createPriceCalculator({
   vatRate = 0.05,
   exchangeRate = 120,

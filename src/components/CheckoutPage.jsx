@@ -281,10 +281,10 @@ export default function CheckoutPage({
               </svg>
             </div>
             <h1 className="text-2xl sm:text-3xl font-serif font-black text-white">
-              Enrollment &amp; Order Confirmed!
+              Order Confirmed &amp; Placed!
             </h1>
             <p className="text-xs sm:text-sm text-gray-400 max-w-md mx-auto">
-              Thank you, <span className="text-white font-semibold">{orderPlaced.customer.fullName}</span>! Your order has been recorded and learning credentials have been prepared.
+              Thank you, <span className="text-white font-semibold">{orderPlaced.customer.fullName}</span>! Your store order has been received and is being prepared for fast delivery.
             </p>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-800 text-emerald-400 text-xs font-mono font-semibold">
               <span>Order Reference: {orderPlaced.orderId}</span>
@@ -297,7 +297,7 @@ export default function CheckoutPage({
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-gray-800">
               <div>
                 <span className="text-xs text-orange-400 font-semibold uppercase tracking-wider">Official Invoice</span>
-                <h2 className="text-xl font-serif font-bold text-white">Edutech Learning Platform</h2>
+                <h2 className="text-xl font-serif font-bold text-white">Suffex Store BD</h2>
                 <p className="text-xs text-gray-400 mt-0.5">Order Date: {orderPlaced.orderDate}</p>
               </div>
               <div className="text-left sm:text-right">
@@ -385,13 +385,13 @@ export default function CheckoutPage({
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
-                onClick={() => onNavigate("dashboard")}
+                onClick={() => onNavigate("orders")}
                 className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 text-white text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition shadow-lg"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                <span>Go to Student Dashboard</span>
+                <span>Go to My Orders &amp; Tracking</span>
               </button>
 
               <button
@@ -407,10 +407,10 @@ export default function CheckoutPage({
 
               <button
                 type="button"
-                onClick={() => onNavigate("courses")}
+                onClick={() => onNavigate("products")}
                 className="py-3 px-4 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-300 hover:text-white border border-gray-700 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition"
               >
-                <span>Browse More</span>
+                <span>Shop More</span>
               </button>
             </div>
           </div>
@@ -419,7 +419,7 @@ export default function CheckoutPage({
     );
   }
 
-  // 2. RENDER: If Cart is empty -> Prompt user to add courses/products
+  // 2. RENDER: If Cart is empty -> Prompt user to add products
   if (cart.length === 0) {
     return (
       <div className="w-full min-h-[70vh] bg-[#12131a] flex items-center justify-center py-16 px-4 font-sans text-center">
@@ -431,22 +431,15 @@ export default function CheckoutPage({
           </div>
           <h2 className="text-xl font-serif font-bold text-white">Your Cart is Currently Empty</h2>
           <p className="text-xs text-gray-400 leading-relaxed">
-            Please select at least one course track or store item to proceed to the checkout page.
+            Please select at least one product from our store to proceed to the checkout page.
           </p>
-          <div className="pt-2 flex flex-col sm:flex-row gap-3">
-            <button
-              type="button"
-              onClick={() => onNavigate("courses")}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white text-xs font-semibold cursor-pointer transition shadow"
-            >
-              Browse Courses
-            </button>
+          <div className="pt-2 flex justify-center">
             <button
               type="button"
               onClick={() => onNavigate("products")}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-[#212430] hover:bg-[#2a2e3d] text-gray-200 border border-gray-700 text-xs font-semibold cursor-pointer transition"
+              className="py-2.5 px-6 rounded-xl bg-gradient-to-r from-[#b0401d] to-[#df5d2c] text-white text-xs font-semibold cursor-pointer transition shadow"
             >
-              Visit Store
+              Browse Shop Products →
             </button>
           </div>
         </div>
@@ -466,10 +459,10 @@ export default function CheckoutPage({
               <span>Secure SSL 256-Bit Checkout</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-serif font-black text-white">
-              Enrollment &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] to-[#f98054]">Checkout</span>
+              Store <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#df5d2c] to-[#f98054]">Checkout</span> &amp; Delivery
             </h1>
             <p className="text-xs text-gray-400 mt-1">
-              Complete your student registration and confirm your payment method below.
+              Provide your delivery address and confirm your payment method below.
             </p>
           </div>
         </div>
@@ -479,14 +472,14 @@ export default function CheckoutPage({
           {/* Left Column (7 cols): Billing Info & Payment Selection */}
           <div className="lg:col-span-7 space-y-6">
             <form onSubmit={handleSubmitOrder} className="space-y-6">
-              {/* Student & Billing Information */}
+              {/* Customer & Delivery Information */}
               <div className="bg-[#191b24] p-6 sm:p-7 rounded-3xl border border-gray-800 shadow-lg space-y-5">
                 <div className="flex items-center gap-2.5 pb-3 border-b border-gray-800">
                   <div className="w-7 h-7 rounded-lg bg-orange-950/60 text-orange-400 border border-orange-800/40 flex items-center justify-center text-xs font-bold">
                     1
                   </div>
                   <h2 className="text-base font-serif font-bold text-white">
-                    Student &amp; Billing Details
+                    Customer &amp; Delivery Details
                   </h2>
                 </div>
 
@@ -771,11 +764,11 @@ export default function CheckoutPage({
                   {orderApi.isLoading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Confirming Order &amp; Enrolling via API...</span>
+                      <span>Placing Store Order via API...</span>
                     </>
                   ) : (
                     <>
-                      <span>Complete Enrollment &amp; Pay</span>
+                      <span>Confirm Order &amp; Pay</span>
                       <span>(৳{grandTotal.toLocaleString()})</span>
                       <span>→</span>
                     </>
@@ -986,7 +979,7 @@ export default function CheckoutPage({
 
                 {originalSavings > 0 && (
                   <div className="flex justify-between text-gray-400">
-                    <span>Course Catalog Savings</span>
+                    <span>Store Catalog Savings</span>
                     <span className="font-mono text-emerald-400">-৳{originalSavings.toLocaleString()}</span>
                   </div>
                 )}
@@ -1020,19 +1013,19 @@ export default function CheckoutPage({
               <div className="pt-3 border-t border-gray-800 grid grid-cols-2 gap-2 text-[10px] text-gray-400">
                 <div className="flex items-center gap-1.5">
                   <span className="text-emerald-400 text-xs">✓</span>
-                  <span>Instant LMS Access</span>
+                  <span>Fast Doorstep Delivery</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-emerald-400 text-xs">✓</span>
-                  <span>7-Day Refund Policy</span>
+                  <span>7-Day Return Policy</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-emerald-400 text-xs">✓</span>
-                  <span>Official Certificate</span>
+                  <span>100% Genuine Products</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-emerald-400 text-xs">✓</span>
-                  <span>Dedicated Support</span>
+                  <span>24/7 Dedicated Support</span>
                 </div>
               </div>
             </div>
